@@ -1,0 +1,11 @@
+{
+  "completed_iterations": 5000,
+  "requested_iterations": 5000,
+  "stop_reason": "iterations",
+  "training_seconds": 197.094763866,
+  "parameters": 7496,
+  "device": "cuda",
+  "torch": "2.8.0+cu128",
+  "gpu": "Tesla T4",
+  "peak_cuda_bytes": 126960640
+}

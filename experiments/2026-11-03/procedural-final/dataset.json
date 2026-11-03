@@ -1,0 +1,57 @@
+{
+  "names": [
+    "drifting-bars",
+    "expanding-rings",
+    "orbit",
+    "rotating-spokes",
+    "plasma",
+    "lattice"
+  ],
+  "fingerprint": "9e09bb1983e6d55865feba8b18c4e9e9cba7f61fb6a786d7a75c6a583487e5a7",
+  "sources": [
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "drifting-bars"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "expanding-rings"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "orbit"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "rotating-spokes"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "plasma"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "lattice"
+    }
+  ],
+  "shape": [
+    6,
+    32,
+    3,
+    32,
+    32
+  ],
+  "fps": 16.0
+}

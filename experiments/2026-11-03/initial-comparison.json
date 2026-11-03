@@ -1,0 +1,58 @@
+{
+  "app_id": "ap-fPKaycJ5FYsI4LxdzpEGUq",
+  "status": "packaging_failed",
+  "summaries_from_logs": [
+    {
+      "variant": "baseline",
+      "status": "complete",
+      "completed_iterations": 5000,
+      "requested_iterations": 5000,
+      "stop_reason": "iterations",
+      "training_seconds": 149.47775134,
+      "parameters": 7496,
+      "device": "cuda",
+      "torch": "2.8.0+cu128",
+      "gpu": "Tesla T4",
+      "peak_cuda_bytes": 116342272,
+      "mean_mse": 0.015460665337741375,
+      "mean_psnr": 19.876965550301268,
+      "eligible_loops": 3,
+      "single_step_reset_mse": 0.030117694288492203
+    },
+    {
+      "variant": "robust",
+      "status": "complete",
+      "completed_iterations": 5000,
+      "requested_iterations": 5000,
+      "stop_reason": "iterations",
+      "training_seconds": 161.619934199,
+      "parameters": 7496,
+      "device": "cuda",
+      "torch": "2.8.0+cu128",
+      "gpu": "Tesla T4",
+      "peak_cuda_bytes": 116343808,
+      "mean_mse": 0.008093229494988918,
+      "mean_psnr": 21.822114272625395,
+      "eligible_loops": 5,
+      "single_step_reset_mse": 0.03050633892416954
+    },
+    {
+      "variant": "normalized",
+      "status": "complete",
+      "completed_iterations": 4596,
+      "requested_iterations": 5000,
+      "stop_reason": "time_budget",
+      "training_seconds": 180.017002156,
+      "parameters": 7496,
+      "device": "cuda",
+      "torch": "2.8.0+cu128",
+      "gpu": "Tesla T4",
+      "peak_cuda_bytes": 125965312,
+      "mean_mse": 0.0047995345667004585,
+      "mean_psnr": 24.675301414430873,
+      "eligible_loops": 5,
+      "single_step_reset_mse": 0.03213293105363846
+    }
+  ],
+  "failure": "ZIP rejected epoch-dated Modal-mounted sources after all three numerical experiments completed. No weights returned."
+}

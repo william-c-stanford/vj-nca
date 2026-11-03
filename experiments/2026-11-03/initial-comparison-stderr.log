@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 987, in handle_input_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 189, in run_input_sync
+    values = io_context.call_function_sync()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/container_io_manager.py", line 266, in call_function_sync
+    expected_value_or_values = self.finalized_function.callable(*args, **kwargs)
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/modal_train.py", line 137, in pilot
+    archive.write(path, path.relative_to(root))
+  File "/usr/local/lib/python3.12/zipfile/__init__.py", line 1854, in write
+    zinfo = ZipInfo.from_file(filename, arcname,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/zipfile/__init__.py", line 573, in from_file
+    zinfo = cls(arcname, date_time)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/zipfile/__init__.py", line 398, in __init__
+    raise ValueError('ZIP does not support timestamps before 1980')
+ValueError: ZIP does not support timestamps before 1980

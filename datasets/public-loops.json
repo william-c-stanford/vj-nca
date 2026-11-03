@@ -1,0 +1,17 @@
+{
+  "checked": "2026-11-03",
+  "clips": [
+    {
+      "name": "commons-plasma",
+      "filename": "plasma.gif",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/f/f7/-PLASMA-ColorCycling.Gif",
+      "page": "https://commons.wikimedia.org/wiki/File:-PLASMA-ColorCycling.Gif",
+      "author": "Ósemkowski",
+      "license": "CC-BY-SA-3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "sha256": "e7c54be20261e103123ecbdacd49c4373c89b9896c26102d0adefc446290ec8a",
+      "duration_seconds": 5.12,
+      "changes": "Audio omitted; center square crop; 32x32; 32 frames; retimed to 2 seconds."
+    }
+  ]
+}

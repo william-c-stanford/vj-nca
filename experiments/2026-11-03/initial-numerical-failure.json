@@ -1,0 +1,39 @@
+{
+  "app_id": "ap-wk6TP89gE8wtKCrdKWJ04Z",
+  "status": "failed",
+  "summaries_from_logs": [
+    {
+      "variant": "baseline",
+      "completed_iterations": 1500,
+      "requested_iterations": 1500,
+      "stop_reason": "iterations",
+      "training_seconds": 45.142207044,
+      "parameters": 7496,
+      "device": "cuda",
+      "torch": "2.8.0+cu128",
+      "gpu": "Tesla T4",
+      "peak_cuda_bytes": 115346944,
+      "mean_mse": 0.04206077381968498,
+      "mean_psnr": 14.206850844491656,
+      "eligible_loops": 0,
+      "single_step_reset_mse": 0.0318409726023674
+    },
+    {
+      "variant": "robust",
+      "completed_iterations": 1500,
+      "requested_iterations": 1500,
+      "stop_reason": "iterations",
+      "training_seconds": 46.575938449000006,
+      "parameters": 7496,
+      "device": "cuda",
+      "torch": "2.8.0+cu128",
+      "gpu": "Tesla T4",
+      "peak_cuda_bytes": 115348480,
+      "mean_mse": 0.032898109406232834,
+      "mean_psnr": 15.739941385587711,
+      "eligible_loops": 0,
+      "single_step_reset_mse": 0.03054630756378174
+    }
+  ],
+  "failure": "Unit-length hidden normalization produced non-finite gradients; earlier artifacts were lost by the initial all-or-nothing wrapper."
+}

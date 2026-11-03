@@ -1,0 +1,29 @@
+{
+  "format_version": 1,
+  "model_config": {
+    "num_loops": 6,
+    "channels": 19,
+    "hidden": 64,
+    "embedding_dim": 12,
+    "phase_harmonics": 3,
+    "perception_scales": [
+      1,
+      2
+    ],
+    "fire_rate": 0.5,
+    "hidden_norm": "unit_ball",
+    "norm_groups": 4,
+    "use_phase": true
+  },
+  "loop_names": [
+    "drifting-bars",
+    "expanding-rings",
+    "orbit",
+    "rotating-spokes",
+    "plasma",
+    "lattice"
+  ],
+  "training_step": 5000,
+  "steps_per_frame": 2,
+  "dataset_fingerprint": "9e09bb1983e6d55865feba8b18c4e9e9cba7f61fb6a786d7a75c6a583487e5a7"
+}

@@ -1,0 +1,15 @@
+{
+  "iterations": 1500,
+  "batch_size": 6,
+  "pool_per_loop": 8,
+  "channels": 19,
+  "hidden": 64,
+  "hidden_norm": "unit_ball",
+  "steps_per_frame": 2,
+  "unroll_min": 8,
+  "unroll_max": 16,
+  "warmup_max": 8,
+  "max_seconds": 240,
+  "device": "cpu",
+  "seed": 42
+}
