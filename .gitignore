@@ -9,3 +9,4 @@ runs/
 *.pt
 *.npz
 !artifacts/*/model.pt
+!experiments/autoresearch/trials/*/model.pt

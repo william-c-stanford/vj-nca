@@ -1,0 +1,33 @@
+{
+  "note": "Non-DC temporal Fourier energy in target clips, before further experiments. This is a representation diagnostic, not an expressivity bound on nonlinear recurrent rules.",
+  "loops": {
+    "drifting-bars": {
+      "phase_energy_1_to_3": 1.0,
+      "phase_energy_1_to_8": 1.0
+    },
+    "expanding-rings": {
+      "phase_energy_1_to_3": 1.0,
+      "phase_energy_1_to_8": 1.0
+    },
+    "orbit": {
+      "phase_energy_1_to_3": 0.9809436202049255,
+      "phase_energy_1_to_8": 0.9999994039535522
+    },
+    "rotating-spokes": {
+      "phase_energy_1_to_3": 1.0,
+      "phase_energy_1_to_8": 1.0
+    },
+    "plasma": {
+      "phase_energy_1_to_3": 1.0,
+      "phase_energy_1_to_8": 1.0
+    },
+    "lattice": {
+      "phase_energy_1_to_3": 0.4993058145046234,
+      "phase_energy_1_to_8": 0.9875503778457642
+    },
+    "commons-plasma": {
+      "phase_energy_1_to_3": 0.8112123608589172,
+      "phase_energy_1_to_8": 0.9982962608337402
+    }
+  }
+}

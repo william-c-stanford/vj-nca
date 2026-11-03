@@ -1,0 +1,25 @@
+{
+  "selected_node": "n4",
+  "selection": "7/7 on fixed development gates; freeze before held-out evaluation",
+  "seed": 9091,
+  "cycles": 16,
+  "burn_cycles": 3,
+  "base_commit": "c69dcac",
+  "files": {
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/media.py": "e2221d14f7b903b3ab23982fa1d2e89a342572e496b9643e853aa3644f51cb45",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/__init__.py": "97231f33fb408ae115fc8e4a7bacb9b40b161eb19fa1ec28294ab128d466992d",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/export.py": "76a76a606100dfc41d9a21669ebd278addee2947191693e731a32387418a8e3f",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/model.py": "7a8c78b31e146f8951e8c0413112e73f125c6ed1907fef4d8d7f08536f1e64bb",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/cli.py": "f497210d3713f4cc0e6fcc53de1cf2f0d4d01725f3e05337fab37df16ce095fd",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/train.py": "9da0d806970a04ac072b127b92646aa327623ab5c3390a48e2af2779de2693dd",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/evaluate.py": "31bee915fe6b908b020bea1e4e1a3eab09d494092e0249585b1c85afaa689e33",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/losses.py": "8fc3f76bfeeeb07cce9c181f6e36656047ac2472c4acbabe9bd0cc9ab759fd44",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/artifacts.py": "84f7e186bcefdd9b152ab4cf2571eeae58e1c9c560b7f3b80b9de0e9bf1b5553",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/__main__.py": "6d8b7d7846a845059d7a3107143f11131f63c5511d669b44085b15ec5e3d2279",
+    "/tmp/vj-nca-heldout-20261103/src/vj_nca/data.py": "525235a2b18b97fdf6d1fd943b4dcf4964d1ec710c7e36f152893ad63962a91f",
+    "/tmp/vj-nca-heldout-20261103/scripts/score_motion.py": "e76f1b15c2c72ccd8661512760fa229876600cf98cb822ac0d4bd232cf7e874a",
+    "/Users/williamstanford/RESEARCH/rnn-nca/vj-nca/experiments/autoresearch/trials/synchronous-003/model.pt": "0c6d03925d2049f3d089c314105857ccf2bb55542f0141530bcfc90fac5e9af7",
+    "/Users/williamstanford/RESEARCH/rnn-nca/vj-nca/artifacts/mixed-v0/model.pt": "2a90ac760677ec7268537ba1b2a12418db1399b493cca7303983e432172e87dd",
+    "/Users/williamstanford/RESEARCH/rnn-nca/vj-nca/data/mixed.npz": "758b4dd719773507e729f82221bd6235dc1ee3810f1177aabf3c2179a6520ca4"
+  }
+}

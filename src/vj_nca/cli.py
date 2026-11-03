@@ -59,6 +59,7 @@ def main():
     testing.add_argument("--device", default="cpu")
     testing.add_argument("--seed", type=int, default=1234)
     testing.add_argument("--cycles", type=int, default=4)
+    testing.add_argument("--phase-frame", type=int, default=0)
     testing.add_argument("--no-export", action="store_true")
     exporting = sub.add_parser("export", help="Save small tensor-only weights for sharing")
     exporting.add_argument("--checkpoint", type=Path, required=True)
@@ -100,6 +101,7 @@ def main():
             args.seed,
             cycles=args.cycles,
             export=not args.no_export,
+            phase_frame=args.phase_frame,
         )
         print(json.dumps({k: v for k, v in metrics.items() if k != "per_loop"}, indent=2))
         return

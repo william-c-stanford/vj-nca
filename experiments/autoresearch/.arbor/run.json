@@ -1,0 +1,15 @@
+{
+  "objective": "Recover all seven conditioned moving loops with phase-correct motion and perturbation recovery, within a 2 USD GPU pilot budget",
+  "metric_direction": "max",
+  "dev_eval": "scripts/score_motion.py --seed 4041 --cycles 4; motion cosine >= 0.7, motion gain 0.5..1.5, per-loop MSE < half mean-frame baseline, all perturbations recover",
+  "test_eval": "Same predeclared metrics with seed 9091, cycles 16, after dev selection only; no unseen-video claim",
+  "material": "c69dcac",
+  "branching": 4,
+  "max_depth": 3,
+  "budget_cycles": 12,
+  "cycles_used": 3,
+  "best_node": "n4",
+  "best_test_score": 7.0,
+  "best_branch_ref": "codex/conditioned-vj-training:artifacts/mixed-v1/model.pt",
+  "created_at": 1793741837
+}

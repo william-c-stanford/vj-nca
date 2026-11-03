@@ -8,10 +8,16 @@ inspection. It does not yet implement a live VJ application or audio input.
 Read [the research and design notes](docs/RESEARCH.md) for the DyNCA, Reasoning-NCA,
 neural particle automata and frequency-time diffusion investigation.
 
-Initial trained artifacts: [seven-loop model](artifacts/mixed-v0/MODEL_CARD.md),
+Current trained artifact: [mixed-v1](artifacts/mixed-v1/MODEL_CARD.md), with 26,452
+parameters. All seven loops pass the stricter motion/recovery check over a
+32-second held-out rollout; mean PSNR is 28.76 dB. Richer phase conditioning and
+synchronous updates fixed the earlier weak-motion result after widening alone
+failed. See the [three-trial autoresearch report](experiments/autoresearch/REPORT.md).
+This remains a 32×32 training-loop pilot, with one public clip and six procedural loops.
+
+Earlier artifacts: [mixed-v0](artifacts/mixed-v0/MODEL_CARD.md),
 [six procedural loops](artifacts/procedural-v0/MODEL_CARD.md), and
-[measured results](docs/EXPERIMENTS.md). The seven-loop model has 11,220 parameters;
-six loops pass the pilot's quality/motion/recovery checks. The rotating lattice fails.
+[initial results](docs/EXPERIMENTS.md).
 
 ## Install
 
@@ -86,7 +92,16 @@ Prepare the checked, small public color-cycling loop and a mixed seven-loop data
 PYTHONPATH=src python scripts/prepare_public.py
 ```
 
-This downloads an 8.1 MB source only if missing, verifies its SHA-256, discards audio,
+Train the selected seven-loop recipe on a short GPU pilot:
+
+```bash
+PYTHONPATH=src modal run --env main cloud/modal_train.py \
+  --data data/mixed.npz --config configs/synchronous-003.json \
+  --out runs/mixed-v1-repeat --variants normalized \
+  --train-seconds 240 --iterations 5000 --budget-usd 0.25
+```
+
+The preparation script downloads an 8.1 MB source only if missing, verifies its SHA-256, discards audio,
 center-crops and downsamples it, and records the source and changes. The public media
 is CC BY-SA 3.0; see [attribution](ATTRIBUTION.md) and the
 [source manifest](datasets/public-loops.json). The six original procedural loops are CC0.
@@ -129,9 +144,14 @@ The small `model.pt` artifact loads with `torch.load(..., weights_only=True)`.
 Keep its `model.json`, source version, dataset provenance and evaluation alongside it.
 
 Metrics use unclipped outputs in [0,1] RGB units; display exports are clipped. A static
-or inaccurate model is ineligible for a recovery success. Evaluation uses new states
-and stochastic masks for the training clips; it does not show generalization to unseen
-clips. Conditioning embeddings alone do not encode new videos without optimization.
+or inaccurate model is ineligible for a recovery success. Schema 2 requires signed
+motion cosine ≥0.7 and gain 0.5–1.5, plus reconstruction better than half the static
+mean-frame baseline. `passing_loops` additionally requires every tested perturbation
+to recover within one second. `--phase-frame` selects another perturbation phase.
+The current evaluator accepts exported `model.pt` files as well as resumable checkpoints.
+Evaluation uses new states and corruption noise for the training clips (also fresh
+firing masks for stochastic models); it does not show generalization to unseen clips.
+Conditioning embeddings alone do not encode new videos without optimization.
 
 ## Verify
 

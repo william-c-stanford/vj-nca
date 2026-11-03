@@ -1,0 +1,72 @@
+{
+  "names": [
+    "drifting-bars",
+    "expanding-rings",
+    "orbit",
+    "rotating-spokes",
+    "plasma",
+    "lattice",
+    "commons-plasma"
+  ],
+  "fingerprint": "2188365ed68f53871b7652e09aaf84abe32c7d5d7a3cd33f92acbfbbf9fe7b30",
+  "sources": [
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "drifting-bars"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "expanding-rings"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "orbit"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "rotating-spokes"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "plasma"
+    },
+    {
+      "kind": "procedural",
+      "license": "CC0-1.0",
+      "generator": "vj_nca.data",
+      "description": "lattice"
+    },
+    {
+      "kind": "video",
+      "file_sha256": "e7c54be20261e103123ecbdacd49c4373c89b9896c26102d0adefc446290ec8a",
+      "url": "https://commons.wikimedia.org/wiki/File:-PLASMA-ColorCycling.Gif",
+      "license": "CC-BY-SA-3.0",
+      "start_seconds": 0,
+      "duration_seconds": 5.12,
+      "retimed_duration_seconds": 2.0,
+      "crop": "center-square",
+      "audio": "discarded",
+      "author": "\u00d3semkowski",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "changes": "Audio omitted; center square crop; 32x32; 32 frames; retimed to 2 seconds."
+    }
+  ],
+  "shape": [
+    7,
+    32,
+    3,
+    32,
+    32
+  ],
+  "fps": 16.0
+}

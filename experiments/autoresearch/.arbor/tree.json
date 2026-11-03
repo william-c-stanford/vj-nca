@@ -1,0 +1,87 @@
+{
+  "_counter": 4,
+  "root": "n0",
+  "nodes": {
+    "n0": {
+      "id": "n0",
+      "parent": null,
+      "depth": 0,
+      "status": "merged",
+      "hypothesis": "Recover all seven conditioned moving loops with phase-correct motion and perturbation recovery, within a 2 USD GPU pilot budget",
+      "insight": "[from n1] Prioritize representation and update dynamics over further blind scaling: doubling capacity did not meet any hard-loop motion gate.\n[from n3] Explicit clock bandwidth helps the high-frequency target, but encoding alone is insufficient; evaluate update dynamics before adding more parameters.\n[from n4] For this driven raster-video task, random per-cell firing was the dominant motion-fidelity bottleneck after a modest capacity and clock-bandwidth increase. Synchronous dynamics retain learned perturbation recovery; recovery does not require stochastic firing.",
+      "metadata": {
+        "dev_score": 4.0,
+        "test_score": 3.0,
+        "result": "Initial 11220-parameter mixed-v0 model: development 4/7, held-out 3/7, held-out mean MSE 0.0051167603 and mean PSNR 24.712804 dB. Both evaluations use new schema-2 gates, not historical motion-energy eligibility.",
+        "branch_ref": "c69dcac"
+      },
+      "created_at": 1793741837,
+      "updated_at": 1793742801
+    },
+    "n1": {
+      "id": "n1",
+      "parent": "n0",
+      "depth": 1,
+      "status": "pruned",
+      "hypothesis": "Increasing state channels from 19 to 35 and hidden width from 96 to 128, with the same 5000-update recipe, will recover the rotating lattice and public plasma motion",
+      "insight": "A 2.24x parameter increase modestly improves the two hard clips but does not restore their motion. Mask noise still lowers signed velocity agreement on otherwise sharp loops. Capacity alone is insufficient for this training budget.",
+      "metadata": {
+        "dev_score": 3.0,
+        "test_score": null,
+        "result": "25172 parameters, 5000 updates in 198.3 seconds on T4; mean MSE 0.004863, 3/7 pass versus baseline 4/7. Lattice motion gain 0.200 and cosine 0.437; public plasma gain 0.317 and cosine 0.463.",
+        "branch_ref": "configs/capacity-001.json; runs/capacity-001/source",
+        "prune_reason": "Capacity increase alone did not solve the hard loops or improve the strict pass count. Keep its immutable result as a control; do not keep widening without a new mechanism."
+      },
+      "created_at": 1793741838,
+      "updated_at": 1793742143
+    },
+    "n2": {
+      "id": "n2",
+      "parent": "n0",
+      "depth": 1,
+      "status": "executed",
+      "hypothesis": "Conditioning bandwidth and update noise, rather than parameter count alone, limit phase-correct motion on the harder loops",
+      "insight": "[from n3] Explicit clock bandwidth helps the high-frequency target, but encoding alone is insufficient; evaluate update dynamics before adding more parameters.\n[from n4] For this driven raster-video task, random per-cell firing was the dominant motion-fidelity bottleneck after a modest capacity and clock-bandwidth increase. Synchronous dynamics retain learned perturbation recovery; recovery does not require stochastic firing.",
+      "metadata": {
+        "dev_score": null,
+        "test_score": null,
+        "result": "",
+        "branch_ref": null
+      },
+      "created_at": 1793742061,
+      "updated_at": 1793743201
+    },
+    "n3": {
+      "id": "n3",
+      "parent": "n2",
+      "depth": 2,
+      "status": "executed",
+      "hypothesis": "Expanding global phase harmonics from 3 to 8, holding the larger model and recipe fixed, will resolve motion components absent from the existing clock inputs",
+      "insight": "Eight phase harmonics improve reconstruction and hard-loop motion over three, but do not meet the motion gate. Richer clock inputs help; stochastic updates still impose substantial jitter and phase lag.",
+      "metadata": {
+        "dev_score": 4.0,
+        "test_score": null,
+        "result": "26452 parameters, 5000 updates in 186.8 seconds; mean MSE 0.003561, 4/7 pass. Lattice gain 0.352, cosine 0.587; public gain 0.347, cosine 0.492.",
+        "branch_ref": "configs/phase-002.json; experiments/autoresearch/trials/phase-002/training-source.zip"
+      },
+      "created_at": 1793742061,
+      "updated_at": 1793742328
+    },
+    "n4": {
+      "id": "n4",
+      "parent": "n2",
+      "depth": 2,
+      "status": "merged",
+      "hypothesis": "Training with synchronous updates (fire_rate 1) will remove stochastic RGB jitter and improve phase tracking and motion cosine, while explicit damage/noise/swap training retains recovery",
+      "insight": "Synchronous updates remove most random RGB jitter and permit stronger high-frequency phase tracking at unchanged parameter count. Explicit damage, noise and state-swap training still provides sub-second recovery on every development loop.",
+      "metadata": {
+        "dev_score": 7.0,
+        "test_score": 7.0,
+        "result": "26452 parameters, 5000 updates / 190.0 seconds on T4. All 7 loops pass fixed quality and recovery gates; mean MSE 0.001790, mean PSNR 28.7466 dB. Lattice motion cosine 0.917 gain 0.810; public plasma cosine 0.737 gain 0.566.",
+        "branch_ref": "configs/synchronous-003.json; experiments/autoresearch/trials/synchronous-003/training-source.zip"
+      },
+      "created_at": 1793742216,
+      "updated_at": 1793742801
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "source_sha256": "7e8d78d8eeff7e1279f62f664b2876c8e24ce5462cb933bc58fd49a475742e50",
+  "variants": [
+    "normalized"
+  ],
+  "iterations": 5000,
+  "train_seconds": 240,
+  "config": {
+    "iterations": 5000,
+    "batch_size": 6,
+    "pool_per_loop": 8,
+    "channels": 35,
+    "hidden": 128,
+    "embedding_dim": 12,
+    "phase_harmonics": 8,
+    "perception_scales": [
+      1,
+      2
+    ],
+    "fire_rate": 0.5,
+    "hidden_norm": "unit_ball",
+    "norm_groups": 4,
+    "use_phase": true,
+    "steps_per_frame": 2,
+    "unroll_min": 8,
+    "unroll_max": 16,
+    "warmup_max": 8,
+    "fresh_fraction": 0.2,
+    "damage_probability": 0.3,
+    "noise_probability": 0.3,
+    "noise_std": 0.12,
+    "swap_probability": 0.15,
+    "perturb_warmup": 200,
+    "spectral_weight": 0.02,
+    "learning_rate": 0.002,
+    "grad_clip": 1.0,
+    "seed": 42,
+    "device": "cpu",
+    "max_seconds": 240,
+    "log_every": 250,
+    "checkpoint_every": 250
+  }
+}

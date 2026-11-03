@@ -8,11 +8,15 @@ configs and tests. Work is contained in the initially empty `vj-nca` repository 
 
 ## Checks
 
-- Fourteen unit/integration tests pass using PyTorch 2.8.0 on CPU. They cover periodic
+- Sixteen unit/integration tests pass using PyTorch 2.8.0 on CPU. They cover periodic
   conditioning, cyclic interpolation across a seam, conditioning gradients, firing
   masks, local hidden bounds, finite gradients from zero, replay identity/phase/age,
   exact resume, dataset/config mismatch rejection, recovery eligibility, epoch-dated
   source archives, artifact path containment and average GIF playback timing.
+- New motion-score tests distinguish target motion from freezing, reversed motion
+  and unrelated flicker with exactly the same motion energy. Released tensor-only
+  weights and full checkpoints reproduce identical evaluation; phase-offset probes
+  match shifted targets and reject invalid phases.
 - A 30-update 32×32 CPU smoke run completed, followed by a much longer rollout. The
   model's poor extrapolation was detected rather than hidden by clipping or a static
   output being counted as recovery.
@@ -25,6 +29,10 @@ configs and tests. Work is contained in the initially empty `vj-nca` repository 
 - Ruff lint and formatting checks pass. No static type checker is configured.
 
 See [EXPERIMENTS.md](EXPERIMENTS.md) for actual GPU results and known model limitations.
+The [autoresearch follow-up](../experiments/autoresearch/REPORT.md) adds three actual
+5,000-update GPU trials, a frozen-candidate 32-second held-out comparison from a
+fresh worktree, and corruption tests at three additional quarter-cycle phases.
+Every new trial preserves its source, portable weights, config, logs and curves.
 
 ## Review
 
@@ -68,3 +76,18 @@ publication-quality multi-seed result has been validated.
 Suitable for reproducible pilot experiments, with model quality and scientific claims
 limited to the measured cases in the experiment report. Larger training is not
 automatically authorized or launched by the wrapper.
+
+## Autoresearch follow-up review
+
+Manually reviewed the current diff from `c69dcac` in the main chat, including
+motion-score reductions/units, schema compatibility, shifted-phase target/probe
+alignment, export/checkpoint loading equivalence, immutable trial capture, cost
+receipts and reported claims. The new helper scripts only read trusted local
+training artifacts. No independent reviewer or cross-model review is claimed.
+The initial unavailable-review-tool record above describes the original commit.
+
+All sixteen tests and Ruff checks pass. The selected portable artifact was the
+actual input to the held-out evaluation, and its preview has 129 frames at exactly
+16 fps (8.0625 seconds). All three new Modal apps are stopped. The selected model
+passes the fixed seven-loop pilot objective; publication-level multi-seed evidence
+and live audio/inference validation remain outside these results.

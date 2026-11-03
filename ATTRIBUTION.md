@@ -14,8 +14,9 @@ under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Changes: 
 crop, downsample to 32×32, resample to 32 frames and retime from 5.12 seconds to two
 seconds. Derived media retains its source attribution and license. The download URL
 and SHA-256 are in [datasets/public-loops.json](datasets/public-loops.json). No audio is
-used. The `artifacts/mixed-v0` weights and previews are released under CC BY-SA 3.0,
-with this attribution carried forward. The procedural-only weights are MIT licensed.
+used. The `artifacts/mixed-v0`, `artifacts/mixed-v1` and mixed-data autoresearch trial
+weights/previews are released under CC BY-SA 3.0, with this attribution carried
+forward. The procedural-only weights are MIT licensed.
 
 Artist VJ-loop sources found during research:
 

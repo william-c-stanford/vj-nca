@@ -11,6 +11,27 @@ from .model import ConditionedNCA, ModelConfig
 from .train import seed_all
 
 
+def motion_statistics(prediction: Tensor, target: Tensor) -> dict[str, Tensor]:
+    """Phase-sensitive motion scores, reduced over time, RGB and space per loop.
+
+    Energy alone rewards flicker. Signed velocity agreement measures whether the
+    model changes the right pixels in the right direction at the right phase.
+    Gain 1 and cosine 1 denote perfect motion; a frozen video has gain/cosine 0.
+    """
+    velocity, truth = prediction.diff(dim=1), target.diff(dim=1)
+    dims = (1, 2, 3, 4)
+    power = truth.square().mean(dims).clamp_min(1e-12)
+    pred_power = velocity.square().mean(dims)
+    dot = (velocity * truth).mean(dims)
+    return {
+        "target_motion_mse": power / 4,
+        "motion_energy_ratio": pred_power / power,
+        "motion_gain": dot / power,
+        "motion_cosine": dot / (pred_power * power).sqrt().clamp_min(1e-12),
+        "relative_temporal_error": (velocity - truth).square().mean(dims) / power,
+    }
+
+
 def recovery_frame(
     paired_error: list[float],
     target_error: list[float],
@@ -66,9 +87,12 @@ def evaluate(
     cycles: int = 4,
     kinds: tuple[str, ...] = ("erase", "noise", "beat", "full-reset"),
     export: bool = True,
+    phase_frame: int = 0,
 ) -> dict:
     if burn_cycles < 0 or cycles < 2:
         raise ValueError("Use nonnegative burn-in and at least two evaluation cycles")
+    if not 0 <= phase_frame < dataset.period:
+        raise ValueError("Perturbation phase_frame must be inside one target cycle")
     saved = torch.load(checkpoint, map_location="cpu", weights_only=False)
     if saved["dataset_fingerprint"] != dataset.fingerprint():
         raise ValueError(
@@ -79,10 +103,15 @@ def evaluate(
     model = ConditionedNCA(ModelConfig(**saved["model_config"])).to(device).eval()
     model.load_state_dict(saved["model"])
     seed_all(seed)
-    spf = saved["train_config"]["steps_per_frame"]
+    # Both resumable checkpoints and the small released tensor-only artifacts work.
+    spf = (
+        saved["train_config"]["steps_per_frame"]
+        if "train_config" in saved
+        else saved["steps_per_frame"]
+    )
     period_ticks = dataset.period * spf
     ids = torch.arange(len(dataset.names), device=device)
-    ticks = torch.zeros_like(ids)
+    ticks = torch.full_like(ids, phase_frame * spf)
     state = model.seed(len(ids), dataset.size, device)
     for _ in range(burn_cycles * period_ticks):
         ticks = (ticks + 1) % period_ticks
@@ -110,8 +139,7 @@ def evaluate(
     clean_error = (clean - target).square().mean((2, 3, 4)) / 4
     mean = dataset.frames.mean(1).cpu()[:, None].expand_as(target)
     mean_error = (mean - target).square().mean((1, 2, 3, 4)) / 4
-    target_motion = target.diff(dim=1).square().mean((1, 2, 3, 4)) / 4
-    pred_motion = clean.diff(dim=1).square().mean((1, 2, 3, 4)) / 4
+    motion = motion_statistics(clean, target)
     temporal = (clean.diff(dim=1) - target.diff(dim=1)).square().mean((1, 2, 3, 4)) / 4
     paired_errors = {
         kind: (videos[kind] - clean).square().mean((2, 3, 4)) / 4 for kind in (*kinds, "switch")
@@ -122,13 +150,17 @@ def evaluate(
     per_loop = {}
     for index, name in enumerate(dataset.names):
         mse = clean_error[index].mean().item()
-        ratio = (pred_motion[index] / target_motion[index].clamp_min(1e-8)).item()
-        eligible = mse < 0.5 * mean_error[index].item() and 0.2 < ratio < 5
+        motion_pass = (
+            motion["motion_cosine"][index].item() >= 0.7
+            and 0.5 <= motion["motion_gain"][index].item() <= 1.5
+        )
+        eligible = mse < 0.5 * mean_error[index].item() and motion_pass
         item = {
             "mse": mse,
             "psnr": -10 * math.log10(max(mse, 1e-12)),
             "temporal_mse": temporal[index].item(),
-            "motion_energy_ratio": ratio,
+            **{key: value[index].item() for key, value in motion.items()},
+            "motion_pass": motion_pass,
             "mean_frame_mse": mean_error[index].item(),
             "recovery_eligible": eligible,
             "cycle_drift_mse": (
@@ -154,8 +186,14 @@ def evaluate(
                 "target_curve": error[index].tolist(),
             }
         per_loop[name] = item
+        times = [p["recovery_seconds"] for p in item["perturbations"].values()]
+        item["quality_and_recovery_pass"] = eligible and all(
+            t is not None and t <= 1.0 for t in times
+        )
     # Test that removing state changes the output: a useful warning for a phase-only fit.
-    probe_ticks = torch.arange(1, dataset.period + 1, device=device) * spf % period_ticks
+    probe_ticks = (
+        (torch.arange(1, dataset.period + 1, device=device) + phase_frame) * spf % period_ticks
+    )
     reset_outputs = []
     for tick in probe_ticks:
         reset_outputs.append(
@@ -171,17 +209,25 @@ def evaluate(
     reset_outputs = torch.stack(reset_outputs, 1)
     reset_mse = ((reset_outputs - target[:, 1 : dataset.period + 1]).square().mean() / 4).item()
     metrics = {
-        "schema_version": 1,
-        "checkpoint_step": saved["step"],
+        "schema_version": 2,
+        "checkpoint_step": saved.get("step", saved.get("training_step")),
         "seed": seed,
         "burn_cycles": burn_cycles,
         "eval_cycles": cycles,
+        "perturbation_phase_frame": phase_frame,
         "note": "Training-loop reconstruction on fresh states/masks; no unseen-clip claim.",
         "mean_mse": clean_error.mean().item(),
         "mean_psnr": sum(x["psnr"] for x in per_loop.values()) / len(per_loop),
         "mean_frame_baseline_mse": mean_error.mean().item(),
         "single_step_reset_mse": reset_mse,
         "eligible_loops": sum(x["recovery_eligible"] for x in per_loop.values()),
+        "passing_loops": sum(x["quality_and_recovery_pass"] for x in per_loop.values()),
+        "quality_gate": {
+            "motion_cosine_min": 0.7,
+            "motion_gain_range": [0.5, 1.5],
+            "mse_max_fraction_of_mean_frame": 0.5,
+            "all_perturbations_recovery_max_seconds": 1.0,
+        },
         "per_loop": per_loop,
     }
     (output / "metrics.json").write_text(json.dumps(metrics, indent=2) + "\n")

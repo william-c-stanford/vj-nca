@@ -87,7 +87,9 @@ def pilot(
             torch.cuda.reset_peak_memory_stats()
             try:
                 checkpoint = train(dataset, cfg, root / variant)
-                metrics = evaluate(checkpoint, dataset, root / variant / "eval", device="cuda")
+                metrics = evaluate(
+                    checkpoint, dataset, root / variant / "eval", device="cuda", seed=4041
+                )
                 report = json.loads((root / variant / "training_report.json").read_text())
                 summary = {
                     "variant": variant,
@@ -99,6 +101,7 @@ def pilot(
                             "mean_mse",
                             "mean_psnr",
                             "eligible_loops",
+                            "passing_loops",
                             "single_step_reset_mse",
                         )
                     },

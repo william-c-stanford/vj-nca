@@ -1,5 +1,10 @@
 # Initial VJ-loop NCA experiments
 
+The subsequent [three-trial autoresearch report](../experiments/autoresearch/REPORT.md)
+and [mixed-v1 model](../artifacts/mixed-v1/MODEL_CARD.md) supersede the best result
+below. These initial counts use schema-1 energy-based eligibility. The follow-up
+re-evaluates the original and new model with the same stricter signed-motion gates.
+
 November 3, 2026. All training used a Tesla T4 through Modal. These are small,
 single-training-seed pilots, with new random masks/states used for evaluation.
 

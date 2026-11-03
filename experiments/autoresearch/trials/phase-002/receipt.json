@@ -1,0 +1,29 @@
+{
+  "provider": "Modal",
+  "gpu": "Tesla T4",
+  "source_sha256": "7e8d78d8eeff7e1279f62f664b2876c8e24ce5462cb933bc58fd49a475742e50",
+  "dataset_file_sha256": "758b4dd719773507e729f82221bd6235dc1ee3810f1177aabf3c2179a6520ca4",
+  "function_seconds": 197.68810277199998,
+  "price_checked": "2026-11-03",
+  "summaries": [
+    {
+      "variant": "normalized",
+      "status": "complete",
+      "completed_iterations": 5000,
+      "requested_iterations": 5000,
+      "stop_reason": "iterations",
+      "training_seconds": 186.84069384199998,
+      "parameters": 26452,
+      "device": "cuda",
+      "torch": "2.8.0+cu128",
+      "gpu": "Tesla T4",
+      "peak_cuda_bytes": 210816000,
+      "mean_mse": 0.0035610301420092583,
+      "mean_psnr": 25.708384487210232,
+      "eligible_loops": 4,
+      "single_step_reset_mse": 0.028901251032948494
+    }
+  ],
+  "cost_status": "resource-time estimate; consult Modal for settled billing",
+  "estimated_function_usd": 0.03676603335353656
+}
