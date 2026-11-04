@@ -1,0 +1,24 @@
+{
+  "status": "complete",
+  "gpu": "NVIDIA A10",
+  "source_sha256": "2c59590dabd402271fdc833dc83f4f5557a91de871f597b474b94952b8bff4d6",
+  "data_sha256": "9a02847feea299af5edaf23f8614a8086bdc73b5516dac9441514e5013b67789",
+  "dataset_fingerprint": "b49b4ddf34690962b3175e347a46d076d4df9cb218cbaada798eb1cb13008e5c",
+  "input_weights_sha256": null,
+  "resume_sha256": null,
+  "initialize_sha256": "60d87d45b7dbac9363aa579580ab054244997fc6018de9351c1397e49053dbb5",
+  "function_seconds": 164.226078542,
+  "estimated_function_usd": 0.057472558446558325,
+  "peak_cuda_bytes": 1435055104,
+  "evaluation": {
+    "seed": 4041,
+    "cycles": 2,
+    "phase_frame": 0
+  },
+  "price_checked": "2026-11-03",
+  "summary": {
+    "mean_mse": 0.001264669583405987,
+    "mean_psnr": 28.98022926541559,
+    "passing_loops": 1
+  }
+}

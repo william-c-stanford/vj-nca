@@ -1,0 +1,12 @@
+{
+  "checked_at_utc": "2026-11-04T14:16:24.153186+00:00",
+  "apps": [
+    {
+      "app_id": "ap-8mMgS6m9blC0gI1j9AknlU",
+      "state": "stopped",
+      "tasks": 0
+    }
+  ],
+  "evidence": "modal app list --env main --json",
+  "estimated_function_usd": 0.057472558446558325
+}

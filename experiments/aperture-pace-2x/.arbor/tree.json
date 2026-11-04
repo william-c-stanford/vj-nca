@@ -1,0 +1,38 @@
+{
+  "_counter": 1,
+  "root": "n0",
+  "nodes": {
+    "n0": {
+      "id": "n0",
+      "parent": null,
+      "depth": 0,
+      "status": "root",
+      "hypothesis": "Match the requested 2x original preview pace without stretching repair time",
+      "insight": "Use separate clocks for loop phase and recurrent repair. A modest four-second teacher needs 256 updates at the existing 64 Hz repair cadence, rather than a global video slowdown.",
+      "metadata": {
+        "dev_score": null,
+        "test_score": null,
+        "result": "",
+        "branch_ref": null
+      },
+      "created_at": 1793801528,
+      "updated_at": 1793801528
+    },
+    "n1": {
+      "id": "n1",
+      "parent": "n0",
+      "depth": 1,
+      "status": "merged",
+      "hypothesis": "Warm-start the complete repair model on a four-second teacher with 256 synchronous updates per cycle",
+      "insight": "Use separate clocks for loop phase and recurrent repair. A modest four-second teacher needs 256 updates at the existing 64 Hz repair cadence, rather than a global video slowdown.",
+      "metadata": {
+        "dev_score": 1.0,
+        "test_score": 1.0,
+        "result": "1500 updates; four-second cycle, 2x original eight-second preview. Frozen PSNR28.986dB, motion cosine.82726. Blackout.469s, rim.266s/core.578s, glitches.141-.203s. All gates pass; estimated function compute0.05747USD. GPU stopped.",
+        "branch_ref": "artifacts/aperture-reactive-2x"
+      },
+      "created_at": 1793801528,
+      "updated_at": 1793801784
+    }
+  }
+}

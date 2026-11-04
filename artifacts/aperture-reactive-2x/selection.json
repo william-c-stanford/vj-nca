@@ -1,0 +1,14 @@
+{
+  "frozen_at_utc": "2026-11-04T14:13:32.895659+00:00",
+  "weights_sha256": "8a425194e82828e1a238d38a93834e1ad4ee9c484befc6a350623f3c1018d30a",
+  "node": "n1",
+  "training_step": 1500,
+  "dev_seed": 4041,
+  "validation_seeds": [
+    9091
+  ],
+  "validation_phases": [
+    16
+  ],
+  "selection": "First small pilot passes the unchanged clean and progressive-repair gates on the corrected four-second teacher. Freeze before validation; no further selection using validation."
+}

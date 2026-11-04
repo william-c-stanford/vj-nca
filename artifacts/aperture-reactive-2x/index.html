@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aperture · twice the original pace</title>
+<style>
+  :root { color-scheme:dark; font-family:system-ui,sans-serif; background:#090b0b; color:#e5e9e1; }
+  body { max-width:1080px; margin:auto; padding:40px 24px 64px; }
+  h1 { font-size:clamp(30px,5vw,52px); font-weight:500; letter-spacing:-.035em; }
+  p { max-width:780px; color:#adb8b1; line-height:1.6; }
+  .kicker { font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:#bce980; }
+  a { color:#89e7df; }
+  .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin:32px 0; }
+  figure { margin:0; }
+  video,img { display:block; width:100%; background:black; }
+  figcaption { color:#adb8b1; font-size:14px; line-height:1.5; padding:12px 0; }
+  details { border-top:1px solid #25302b; padding:20px 0; }
+  summary { cursor:pointer; }
+  @media(max-width:650px) { .grid { grid-template-columns:1fr; } body { padding:28px 16px; } }
+</style>
+<main>
+  <p class="kicker">Trained neural cellular automata · native 512 × 512</p>
+  <h1>Twice the original pace.</h1>
+  <p>A four-second cycle, compared with the original eight-second shader preview.
+    Each eight-second clip shows two complete cycles. Recovery keeps its own timing.</p>
+  <div class="grid">
+    <figure>
+      <video src="clean.mp4" autoplay loop muted controls playsinline></video>
+      <figcaption>The retrained loop at the corrected pace.</figcaption>
+    </figure>
+    <figure>
+      <video src="blackout.mp4" poster="blackout-start.png" autoplay loop muted controls playsinline></video>
+      <figcaption>A large black circle rebuilds from its surviving rim toward its core.</figcaption>
+    </figure>
+    <figure>
+      <video src="glitch.mp4" poster="glitch-start.png" loop muted controls playsinline></video>
+      <figcaption>Pink, cyan and magenta damage with gradual repair.</figcaption>
+    </figure>
+    <figure>
+      <video src="beat.mp4" loop muted controls playsinline></video>
+      <figcaption>Brightness and hidden-state beat kick with quick recovery. No audio input.</figcaption>
+    </figure>
+  </div>
+  <details>
+    <summary>Teacher and other distortions</summary>
+    <div class="grid">
+      <figure><video src="teacher.mp4" loop muted controls playsinline></video><figcaption>The four-second training teacher.</figcaption></figure>
+      <figure><video src="rgb-split.mp4" loop muted controls playsinline></video><figcaption>RGB splitting.</figcaption></figure>
+      <figure><video src="tear.mp4" loop muted controls playsinline></video><figcaption>Horizontal tears.</figcaption></figure>
+    </div>
+  </details>
+  <details>
+    <summary>Inspect the first second of rebuilding</summary>
+    <img src="blackout-contact.png" alt="Time samples of the black circle rebuilding from its rim">
+    <img src="glitch-contact.png" alt="Time samples of chromatic state damage recovering">
+    <p>The local repair rule uses a supervised growth prior. Clips show raw NCA RGB;
+      there is no video crossfade.</p>
+  </details>
+  <p><a href="MODEL_CARD.md">Model and reproduction</a> ·
+    <a href="../../experiments/aperture-pace-2x/REPORT.md">Training and validation</a> ·
+    <a href="comparison.mp4">Teacher / clean / blackout / glitch comparison</a></p>
+</main>
+</html>

@@ -1,0 +1,18 @@
+{
+  "recipe": "learned-local-repair",
+  "completed_iterations": 1500,
+  "requested_iterations": 1500,
+  "stop_reason": "iterations",
+  "training_seconds": 110.842847117,
+  "parameters": 144629,
+  "device": "cuda",
+  "parent_weights_sha256": "60d87d45b7dbac9363aa579580ab054244997fc6018de9351c1397e49053dbb5",
+  "torch": "2.8.0+cu128",
+  "gpu": "NVIDIA A10",
+  "peak_cuda_bytes": 1435055104,
+  "curriculum": {
+    "front_rate": 0.35,
+    "spontaneous_growth": 0.002,
+    "support_loss_weight": 2
+  }
+}

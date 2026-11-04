@@ -1,5 +1,8 @@
 # aperture-reactive-v1
 
+Historical pace experiment. Its quarter-second cycle was excessive; the active
+[2× model](../aperture-reactive-2x/MODEL_CARD.md) uses a four-second cycle as requested.
+
 Native 512×512 Aperture with a genuinely faster training target, black-circle damage,
 pink/cyan/magenta glitches and learned spatial repair. **144,629 parameters**,
 12 state channels: RGB, eight bounded hidden channels and one bounded integrity
@@ -100,9 +103,8 @@ Initialize using `model.seed(...)`. Supply phase `tick % 16 / 16`, one update pe
 To train from the previous model:
 
 ```sh
-PYTHONPATH=src python scripts/prepare_reactive.py
 PYTHONPATH=src modal run --env main cloud/train_aperture.py \
-  --config configs/aperture-reactive.json --data data/aperture-reactive.npz \
+  --config configs/aperture-reactive.json --data artifacts/aperture-reactive-v1/targets.npz \
   --initialize artifacts/aperture-fast-v1/model.pt --out runs/reactive-repeat \
   --iterations 1500 --seconds 150 --budget-usd 0.35
 ```

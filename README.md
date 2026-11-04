@@ -8,21 +8,26 @@ inspection. It does not yet implement a live VJ application or audio input.
 Read [the research and design notes](docs/RESEARCH.md) for the DyNCA, Reasoning-NCA,
 neural particle automata and frequency-time diffusion investigation.
 
-Current native-512 artifact: [aperture-reactive-v1](artifacts/aperture-reactive-v1/MODEL_CARD.md).
-The actual training teacher now advances **four contours per second at 64 fps**,
-8× its previous speed. Large true-black circles, pink/cyan/magenta glitches,
+Current native-512 artifact: [aperture-reactive-2x](artifacts/aperture-reactive-2x/MODEL_CARD.md).
+The training target has a **four-second cycle: 2× the original eight-second preview**.
+Large true-black circles, pink/cyan/magenta glitches,
 RGB splitting and horizontal tears train a local integrity field for visible
 spatial rebuilding. Blackout cores recover later than their rims, while beat
-flashes retain quick recovery. Frozen validation, including 32 seconds, passes
-with motion cosine 0.947. [Preview gallery](artifacts/aperture-reactive-v1/index.html)
-and [training report](experiments/aperture-reactive/REPORT.md). One preset; code/text
+flashes retain quick recovery. Motion and repair use separate timing: the NCA
+updates at 64 Hz while completing one contour advance in four seconds.
+[Preview gallery](artifacts/aperture-reactive-2x/index.html)
+and [training report](experiments/aperture-pace-2x/REPORT.md). One preset; code/text
 conditioning and real audio input remain future work.
+
+The earlier [reactive-v1 experiment](artifacts/aperture-reactive-v1/MODEL_CARD.md)
+used an excessive quarter-second cycle. Its weights and evidence are retained,
+but that pace has been superseded by the user's 2× clarification.
 
 Earlier inference-speed baseline: [aperture-fast-v1](artifacts/aperture-fast-v1/MODEL_CARD.md).
 The selected Aperture shader is now a trained **512×512 NCA**, with 144,332 parameters,
 28.02 dB PSNR, motion cosine 0.902 and passing recovery checks over a frozen 32-second
 rollout. Measured inference plus RGB readback reaches **136 fps on an M4 Max**
-(7.7 ms p95; display/audio excluded). The default cycle is two seconds, four times
+(7.7 ms p95; display/audio excluded). That earlier artifact's cycle is two seconds, four times
 faster than the original preview; the [150 BPM gallery](artifacts/aperture-fast-v1/index.html)
 plays it in 1.6 seconds. [Training and speed report](experiments/aperture-fast/REPORT.md).
 This is one shader preset; parameter/code/text conditioning remains future work.
@@ -95,19 +100,20 @@ continue training, or `--weights .../model.pt` for evaluation only. The released
 [model card](artifacts/aperture-fast-v1/MODEL_CARD.md) includes exact targets,
 evaluation, tempo-controlled rendering and local benchmark commands.
 
-For the current fast teacher and progressive repair recipe:
+For the current 2× teacher and progressive repair recipe:
 
 ```bash
 PYTHONPATH=src python scripts/prepare_reactive.py
 PYTHONPATH=src modal run --env main cloud/train_aperture.py \
-  --config configs/aperture-reactive.json --data data/aperture-reactive.npz \
-  --initialize artifacts/aperture-fast-v1/model.pt --out runs/reactive-pilot \
+  --config configs/aperture-reactive-2x.json --data data/aperture-reactive-2x.npz \
+  --initialize artifacts/aperture-reactive-v1/model.pt --out runs/reactive-2x-pilot \
   --iterations 1500 --seconds 150 --budget-usd 0.35
 ```
 
 Use `scripts/evaluate_reactive.py` with the released model/targets to render
-blackout and glitch recovery at the actual 64 fps training cadence. See its
-[model card](artifacts/aperture-reactive-v1/MODEL_CARD.md) for commands and controls.
+blackout and glitch recovery at the actual 64 Hz training cadence. Four NCA
+updates interpolate each 16 fps source frame, preserving the four-second cycle.
+See its [model card](artifacts/aperture-reactive-2x/MODEL_CARD.md) for commands and controls.
 
 Create six original, smooth, seamless VJ-style test loops. Each has 32 frames at 32×32,
 played at 16 fps. One shared network learns all six with separate conditioning codes.

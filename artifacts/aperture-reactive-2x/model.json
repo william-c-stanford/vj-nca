@@ -1,0 +1,44 @@
+{
+  "format_version": 1,
+  "model_config": {
+    "num_loops": 1,
+    "channels": 12,
+    "hidden": 64,
+    "embedding_dim": 12,
+    "phase_harmonics": 16,
+    "perception_scales": [
+      1,
+      2
+    ],
+    "fire_rate": 1.0,
+    "hidden_norm": "unit_ball",
+    "norm_groups": 2,
+    "use_phase": true,
+    "spatial_frequencies": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "hidden_layers": 2,
+    "plane_channels": 4,
+    "plane_resolution": 128,
+    "plane_time_resolution": 64,
+    "direct_rgb": true,
+    "repair_channel": true,
+    "repair_radius": 8,
+    "repair_rate": 0.12,
+    "repair_threshold": 0.15
+  },
+  "loop_names": [
+    "aperture"
+  ],
+  "training_step": 1500,
+  "steps_per_frame": 4,
+  "dataset_fingerprint": "b49b4ddf34690962b3175e347a46d076d4df9cb218cbaada798eb1cb13008e5c",
+  "dataset_period": 64,
+  "dataset_fps": 16.0,
+  "dataset_size": 512
+}

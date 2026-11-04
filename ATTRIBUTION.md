@@ -25,6 +25,11 @@ The same licenses apply to `artifacts/aperture-reactive-v1` and
 frame of the original Aperture float32 targets and uses a 0.25-second period at 64 fps.
 Blackout/glitch previews are outputs of the trained state-damage/repair model.
 
+The corrected `artifacts/aperture-reactive-2x` and `experiments/aperture-pace-2x`
+use the same licenses. They retain all 64 original float32 Aperture frames at
+16 fps, interpolated over four NCA updates per frame: a four-second cycle at
+64 updates/second, twice the original eight-second shader preview's pace.
+
 The public pilot includes **-PLASMA-ColorCycling.Gif**, by **Ósemkowski**, obtained from
 [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:-PLASMA-ColorCycling.Gif),
 under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Changes: center square

@@ -9,8 +9,8 @@ now passes native 512×512 motion/recovery checks with measured local throughput
 including RGB readback. This is a single-preset learned-ID baseline; semantic and
 numeric-control conditioning remain untrained.
 
-The subsequent [reactive Aperture model](../artifacts/aperture-reactive-v1/MODEL_CARD.md)
-trains against a much faster teacher (four contour advances/second at 64 fps) and
+The current [reactive Aperture model](../artifacts/aperture-reactive-2x/MODEL_CARD.md)
+trains against a four-second teacher cycle (2× the original eight-second preview) and
 adds true blackouts, chromatic glitches and supervised local rebuilding. This
 separates motion pace from repair duration; it does not add semantic conditioning.
 
@@ -20,7 +20,7 @@ The user subsequently delegated visual selection. The chosen direction is
 [512×512 shader previews](../artifacts/shader-preview-v0/index.html), exact source,
 descriptions and normalized controls are now rendered and recorded. Other visual
 directions are filed in [FUTURE_WORK.md](FUTURE_WORK.md). The original eight-second
-preview is now trained as a two-second cycle, with faster tempo exports available.
+preview is now trained as a four-second cycle, with repair kept at 64 updates/second.
 No semantic encoder, parameter sweep or unseen-program result is claimed.
 
 ## What this would let us test

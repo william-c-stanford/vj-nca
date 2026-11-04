@@ -9,8 +9,8 @@ with passing motion/recovery checks and measured 136 fps inference plus RGB read
 on M4 Max. Structured multi-preset conditioning is the next training question;
 the broader visual directions below remain deferred.
 
-The [reactive extension](../artifacts/aperture-reactive-v1/MODEL_CARD.md) now trains
-actual faster motion plus blackouts and color distortions with spatial repair.
+The [reactive extension](../artifacts/aperture-reactive-2x/MODEL_CARD.md) now trains
+motion at 2× the original preview pace, plus blackouts and color distortions with spatial repair.
 Further recovery aesthetics can explore branching or pattern-dependent growth,
 and explicitly conditioned repair duration. The current local-growth prior is
 supervised; do not describe it as unrestricted emergent morphogenesis.

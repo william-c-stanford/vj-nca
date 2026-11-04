@@ -1,0 +1,122 @@
+{
+  "beat.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 512,
+        "height": 512,
+        "r_frame_rate": "64/1",
+        "nb_frames": "512"
+      }
+    ],
+    "format": {
+      "duration": "8.000000"
+    }
+  },
+  "blackout.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 512,
+        "height": 512,
+        "r_frame_rate": "64/1",
+        "nb_frames": "512"
+      }
+    ],
+    "format": {
+      "duration": "8.000000"
+    }
+  },
+  "clean.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 512,
+        "height": 512,
+        "r_frame_rate": "64/1",
+        "nb_frames": "512"
+      }
+    ],
+    "format": {
+      "duration": "8.000000"
+    }
+  },
+  "comparison.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 2048,
+        "height": 512,
+        "r_frame_rate": "64/1",
+        "nb_frames": "512"
+      }
+    ],
+    "format": {
+      "duration": "8.000000"
+    }
+  },
+  "glitch.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 512,
+        "height": 512,
+        "r_frame_rate": "64/1",
+        "nb_frames": "512"
+      }
+    ],
+    "format": {
+      "duration": "8.000000"
+    }
+  },
+  "rgb-split.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 512,
+        "height": 512,
+        "r_frame_rate": "64/1",
+        "nb_frames": "512"
+      }
+    ],
+    "format": {
+      "duration": "8.000000"
+    }
+  },
+  "teacher.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 512,
+        "height": 512,
+        "r_frame_rate": "64/1",
+        "nb_frames": "512"
+      }
+    ],
+    "format": {
+      "duration": "8.000000"
+    }
+  },
+  "tear.mp4": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "width": 512,
+        "height": 512,
+        "r_frame_rate": "64/1",
+        "nb_frames": "512"
+      }
+    ],
+    "format": {
+      "duration": "8.000000"
+    }
+  }
+}
