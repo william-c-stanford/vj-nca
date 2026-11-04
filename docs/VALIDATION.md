@@ -91,3 +91,42 @@ actual input to the held-out evaluation, and its preview has 129 frames at exact
 16 fps (8.0625 seconds). All three new Modal apps are stopped. The selected model
 passes the fixed seven-loop pilot objective; publication-level multi-seed evidence
 and live audio/inference validation remain outside these results.
+
+## Native-512 exploration
+
+The current source passes 24 CPU tests plus Ruff lint/format and diff-whitespace
+checks. Added coverage includes full/patch interior equivalence with learned
+feature planes, native per-sample crops, periodic time-plane gradients, genuine
+canvas-edge supervision, exact resume with the separate plane learning rate,
+direct-visible-channel firing semantics, and streaming/full evaluator agreement.
+The streaming evaluator also reproduces the accepted mixed-v1 seven-loop pass on
+the actual frozen artifact. Earlier checkpoints retain their default model rule.
+
+Four completed small GPU experiments exercised native-512 preparation, patch
+optimization, source/checkpoint streaming, full-canvas evaluation and 512-pixel
+video export. None passes the motion/recovery gates. A further ablation was
+interrupted when the user rejected the source aesthetic; its result is unscored.
+All apps were verified stopped. See the
+[native-512 evidence report](../experiments/rave-512/REPORT.md).
+
+Manual review covered phase/coordinate alignment, old-config defaults, optimizer
+grouping, replay origins on resets/swaps/resume, periodic feature sampling,
+unclipped metric units, source licenses and timeout estimates. No independent
+review is claimed. The new shader-conditioning document is a research proposal;
+it is not an implemented or validated shader-conditioned model.
+
+## Original shader previews
+
+Three original GLSL programs were compiled and rendered on Apple M4 Max at native
+512×512, with 192 frames at 24 fps per loop. The renderer verifies finite outputs,
+sampled output bounds, raw phase-zero/one continuity and numerical derivative
+continuity. The endpoint is excluded from the video. Source, controls and renderer
+versions are retained. Native-float motion probes compare the candidates; they
+are explicitly not neural-training results. Aperture is selected for its low
+temporal complexity; Fold and Interference remain later curriculum studies.
+
+All 24 existing tests and Ruff checks continue to pass. No GPU-dependent unit
+tests were added; actual local OpenGL compilation/rendering exercises this optional
+path. The initial sandboxed context could not choose a pixel format; granting the
+local render process graphics access resolved it. No cloud GPU training or semantic
+encoder call was made for this preview stage. No independent reviewer is claimed.

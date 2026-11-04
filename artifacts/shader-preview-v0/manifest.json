@@ -1,0 +1,169 @@
+{
+  "name": "kinetic-line-studies-v0",
+  "description": "Original kinetic light sculptures: restrained palette, black space, broad coherent line motion.",
+  "license": "CC0-1.0",
+  "code_license": "MIT",
+  "size": 512,
+  "fps": 24,
+  "duration_seconds": 8,
+  "controls": {
+    "density": {
+      "min": 5.0,
+      "max": 14.0,
+      "meaning": "carrier repetitions per normalized unit"
+    },
+    "warp": {
+      "min": 0.0,
+      "max": 0.28,
+      "meaning": "coherent spatial deformation"
+    },
+    "tilt": {
+      "min": -0.6,
+      "max": 0.6,
+      "meaning": "orientation in radians"
+    },
+    "width": {
+      "min": 0.004,
+      "max": 0.012,
+      "meaning": "half thickness in normalized coordinates"
+    },
+    "accent": {
+      "min": 0.0,
+      "max": 1.0,
+      "meaning": "acid-green accent amount"
+    },
+    "softness": {
+      "min": 0.003,
+      "max": 0.012,
+      "meaning": "soft luminous edge width in normalized coordinates"
+    }
+  },
+  "clips": [
+    {
+      "name": "aperture",
+      "shader": "aperture.frag",
+      "description": "Rounded rectangular light contours travel through a dark architectural opening with a small cyclic shear.",
+      "parameters": {
+        "density": 8.0,
+        "warp": 0.1,
+        "tilt": -0.28,
+        "width": 0.01,
+        "accent": 0.6,
+        "softness": 0.012
+      },
+      "normalized_controls": {
+        "density": 0.3333333333333333,
+        "warp": 0.35714285714285715,
+        "tilt": 0.26666666666666666,
+        "width": 0.75,
+        "accent": 0.6,
+        "softness": 1.0
+      },
+      "source_sha256": "4aaf3f837e1f761059f1267b03517a4e92175081d00ba3fd9d9733f70e6759db",
+      "description_sha256": "1275a129f65aae5cacf97a48149eddaa95e5f448b1e88fff3c3d69047913eb81",
+      "vertex_sha256": "2ada95fa82e20fe1aeed24494914268816849d7a1baa50b3c38570a4769399b9",
+      "renderer": "Apple M4 Max",
+      "opengl_version": "4.1 Metal - 89.4",
+      "moderngl_version": "5.13.0",
+      "glcontext_version": "3.1.0",
+      "renderer_source_sha256": "ed8f1ec3d13570b6046aff3905811002dd53ee8df4d728317d41dd3cf10b4d75",
+      "seam_max_error": 3.3974647521972656e-06,
+      "seam_derivative_rmse": 0.000229347831918858,
+      "seam_derivative_relative_error": 5.3259362924161046e-05,
+      "frames": 192,
+      "static_mean_mse": 0.05147565306198659,
+      "adjacent_mse": 0.00030577868827818573,
+      "seam_adjacent_ratio": 1.6357254749669063,
+      "mean_luminance_range": [
+        0.10881453252956366,
+        0.11612973081690003
+      ]
+    },
+    {
+      "name": "fold",
+      "shader": "fold.frag",
+      "description": "An ivory ribbed light sheet bends through one slow travelling fold; an acid-green rib marks the direction.",
+      "parameters": {
+        "density": 10.0,
+        "warp": 0.2,
+        "tilt": -0.16,
+        "width": 0.01,
+        "accent": 0.75,
+        "softness": 0.012
+      },
+      "normalized_controls": {
+        "density": 0.5555555555555556,
+        "warp": 0.7142857142857143,
+        "tilt": 0.36666666666666664,
+        "width": 0.75,
+        "accent": 0.75,
+        "softness": 1.0
+      },
+      "source_sha256": "c46059e29911cc5fb49ab00770aa6ff50f15557868e143f03e1212535b6d6c94",
+      "description_sha256": "9447da2911dde3fa26311dd68688e24cb6bad1e5b09452c4da425c49a9ca02a6",
+      "vertex_sha256": "2ada95fa82e20fe1aeed24494914268816849d7a1baa50b3c38570a4769399b9",
+      "renderer": "Apple M4 Max",
+      "opengl_version": "4.1 Metal - 89.4",
+      "moderngl_version": "5.13.0",
+      "glcontext_version": "3.1.0",
+      "renderer_source_sha256": "ed8f1ec3d13570b6046aff3905811002dd53ee8df4d728317d41dd3cf10b4d75",
+      "seam_max_error": 2.2172927856445312e-05,
+      "seam_derivative_rmse": 0.0007254395168274641,
+      "seam_derivative_relative_error": 2.951627813513596e-05,
+      "frames": 192,
+      "static_mean_mse": 0.05876609260530498,
+      "adjacent_mse": 0.017982014167215187,
+      "seam_adjacent_ratio": 0.7808144410504406,
+      "mean_luminance_range": [
+        0.1035358040889203,
+        0.13472036507542184
+      ]
+    },
+    {
+      "name": "interference",
+      "shader": "interference.frag",
+      "description": "Two finite ivory line fields shear into broad moving interference bands against black; a restrained green edge carries tension.",
+      "parameters": {
+        "density": 10.0,
+        "warp": 0.13,
+        "tilt": 0.24,
+        "width": 0.01,
+        "accent": 0.45,
+        "softness": 0.012
+      },
+      "normalized_controls": {
+        "density": 0.5555555555555556,
+        "warp": 0.46428571428571425,
+        "tilt": 0.7,
+        "width": 0.75,
+        "accent": 0.45,
+        "softness": 1.0
+      },
+      "source_sha256": "233cebaaebc54db845a0acc077775ded143b818eaf95cff9961f444ea54a6f5f",
+      "description_sha256": "5da7c3b0e85f1dc74b5ec2cdaf3086d4e25250e29ef67c1c14f79cda06eab034",
+      "vertex_sha256": "2ada95fa82e20fe1aeed24494914268816849d7a1baa50b3c38570a4769399b9",
+      "renderer": "Apple M4 Max",
+      "opengl_version": "4.1 Metal - 89.4",
+      "moderngl_version": "5.13.0",
+      "glcontext_version": "3.1.0",
+      "renderer_source_sha256": "ed8f1ec3d13570b6046aff3905811002dd53ee8df4d728317d41dd3cf10b4d75",
+      "seam_max_error": 1.245737075805664e-05,
+      "seam_derivative_rmse": 0.00044293704559095204,
+      "seam_derivative_relative_error": 3.6230830086992256e-05,
+      "frames": 192,
+      "static_mean_mse": 0.024174971763581223,
+      "adjacent_mse": 0.0032994236324119007,
+      "seam_adjacent_ratio": 1.1200997403032233,
+      "mean_luminance_range": [
+        0.06435665344759901,
+        0.07440564845715009
+      ]
+    }
+  ],
+  "first_training_target": "aperture",
+  "selection_rationale": "Lowest measured temporal complexity of the three original studies. Chosen as the first family; learnability remains a hypothesis until NCA training.",
+  "frames": 192,
+  "render_seconds": 3.6716982920188457,
+  "preview_only": false,
+  "nca_trained": false
+}

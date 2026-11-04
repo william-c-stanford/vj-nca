@@ -1,0 +1,40 @@
+{
+  "name": "interference",
+  "shader": "interference.frag",
+  "description": "Two finite ivory line fields shear into broad moving interference bands against black; a restrained green edge carries tension.",
+  "parameters": {
+    "density": 10.0,
+    "warp": 0.13,
+    "tilt": 0.24,
+    "width": 0.01,
+    "accent": 0.45,
+    "softness": 0.012
+  },
+  "normalized_controls": {
+    "density": 0.5555555555555556,
+    "warp": 0.46428571428571425,
+    "tilt": 0.7,
+    "width": 0.75,
+    "accent": 0.45,
+    "softness": 1.0
+  },
+  "source_sha256": "233cebaaebc54db845a0acc077775ded143b818eaf95cff9961f444ea54a6f5f",
+  "description_sha256": "5da7c3b0e85f1dc74b5ec2cdaf3086d4e25250e29ef67c1c14f79cda06eab034",
+  "vertex_sha256": "2ada95fa82e20fe1aeed24494914268816849d7a1baa50b3c38570a4769399b9",
+  "renderer": "Apple M4 Max",
+  "opengl_version": "4.1 Metal - 89.4",
+  "moderngl_version": "5.13.0",
+  "glcontext_version": "3.1.0",
+  "renderer_source_sha256": "ed8f1ec3d13570b6046aff3905811002dd53ee8df4d728317d41dd3cf10b4d75",
+  "seam_max_error": 1.245737075805664e-05,
+  "seam_derivative_rmse": 0.00044293704559095204,
+  "seam_derivative_relative_error": 3.6230830086992256e-05,
+  "frames": 192,
+  "static_mean_mse": 0.024174971763581223,
+  "adjacent_mse": 0.0032994236324119007,
+  "seam_adjacent_ratio": 1.1200997403032233,
+  "mean_luminance_range": [
+    0.06435665344759901,
+    0.07440564845715009
+  ]
+}

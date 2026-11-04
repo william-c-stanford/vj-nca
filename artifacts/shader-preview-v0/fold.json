@@ -1,0 +1,40 @@
+{
+  "name": "fold",
+  "shader": "fold.frag",
+  "description": "An ivory ribbed light sheet bends through one slow travelling fold; an acid-green rib marks the direction.",
+  "parameters": {
+    "density": 10.0,
+    "warp": 0.2,
+    "tilt": -0.16,
+    "width": 0.01,
+    "accent": 0.75,
+    "softness": 0.012
+  },
+  "normalized_controls": {
+    "density": 0.5555555555555556,
+    "warp": 0.7142857142857143,
+    "tilt": 0.36666666666666664,
+    "width": 0.75,
+    "accent": 0.75,
+    "softness": 1.0
+  },
+  "source_sha256": "c46059e29911cc5fb49ab00770aa6ff50f15557868e143f03e1212535b6d6c94",
+  "description_sha256": "9447da2911dde3fa26311dd68688e24cb6bad1e5b09452c4da425c49a9ca02a6",
+  "vertex_sha256": "2ada95fa82e20fe1aeed24494914268816849d7a1baa50b3c38570a4769399b9",
+  "renderer": "Apple M4 Max",
+  "opengl_version": "4.1 Metal - 89.4",
+  "moderngl_version": "5.13.0",
+  "glcontext_version": "3.1.0",
+  "renderer_source_sha256": "ed8f1ec3d13570b6046aff3905811002dd53ee8df4d728317d41dd3cf10b4d75",
+  "seam_max_error": 2.2172927856445312e-05,
+  "seam_derivative_rmse": 0.0007254395168274641,
+  "seam_derivative_relative_error": 2.951627813513596e-05,
+  "frames": 192,
+  "static_mean_mse": 0.05876609260530498,
+  "adjacent_mse": 0.017982014167215187,
+  "seam_adjacent_ratio": 0.7808144410504406,
+  "mean_luminance_range": [
+    0.1035358040889203,
+    0.13472036507542184
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "name": "aperture",
+  "shader": "aperture.frag",
+  "description": "Rounded rectangular light contours travel through a dark architectural opening with a small cyclic shear.",
+  "parameters": {
+    "density": 8.0,
+    "warp": 0.1,
+    "tilt": -0.28,
+    "width": 0.01,
+    "accent": 0.6,
+    "softness": 0.012
+  },
+  "normalized_controls": {
+    "density": 0.3333333333333333,
+    "warp": 0.35714285714285715,
+    "tilt": 0.26666666666666666,
+    "width": 0.75,
+    "accent": 0.6,
+    "softness": 1.0
+  },
+  "source_sha256": "4aaf3f837e1f761059f1267b03517a4e92175081d00ba3fd9d9733f70e6759db",
+  "description_sha256": "1275a129f65aae5cacf97a48149eddaa95e5f448b1e88fff3c3d69047913eb81",
+  "vertex_sha256": "2ada95fa82e20fe1aeed24494914268816849d7a1baa50b3c38570a4769399b9",
+  "renderer": "Apple M4 Max",
+  "opengl_version": "4.1 Metal - 89.4",
+  "moderngl_version": "5.13.0",
+  "glcontext_version": "3.1.0",
+  "renderer_source_sha256": "ed8f1ec3d13570b6046aff3905811002dd53ee8df4d728317d41dd3cf10b4d75",
+  "seam_max_error": 3.3974647521972656e-06,
+  "seam_derivative_rmse": 0.000229347831918858,
+  "seam_derivative_relative_error": 5.3259362924161046e-05,
+  "frames": 192,
+  "static_mean_mse": 0.05147565306198659,
+  "adjacent_mse": 0.00030577868827818573,
+  "seam_adjacent_ratio": 1.6357254749669063,
+  "mean_luminance_range": [
+    0.10881453252956366,
+    0.11612973081690003
+  ]
+}

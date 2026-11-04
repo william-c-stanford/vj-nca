@@ -1,0 +1,90 @@
+{
+  "note": "Native float GLSL renders at 64 uniform phases. Learning-difficulty proxies, not trained NCA results. Spatial retention uses linear area-downsample/bilinear-upsample signed velocities; it is not a nonlinear expressivity bound.",
+  "samples": 64,
+  "resolution": 512,
+  "manifest_sha256": "389e75f70e6f092f27df3f18307f2c1fc874ee1f183f737c346d6c104ef6a535",
+  "probe_source_sha256": "bc3b20d99e530cb562964ce559ab500d6b2ad41a5fc98f5bd674f5baf7f3e19a",
+  "per_loop": {
+    "aperture": {
+      "phase_harmonic_energy": {
+        "4": 0.9539496493393747,
+        "8": 0.9889254908529881,
+        "16": 0.9994888762311429
+      },
+      "velocity_harmonic_energy": {
+        "4": 0.5461901673444585,
+        "8": 0.7714198569625579,
+        "16": 0.9746098607020988
+      },
+      "spatial_motion_retention": {
+        "64": {
+          "motion_gain": 0.2074457533477344,
+          "motion_cosine": 0.566169870952707
+        },
+        "128": {
+          "motion_gain": 0.4572936881938096,
+          "motion_cosine": 0.7668184701651288
+        },
+        "256": {
+          "motion_gain": 0.7260321518198861,
+          "motion_cosine": 0.9320473776556423
+        }
+      },
+      "temporal_rank_90pct_at_32px": 3
+    },
+    "fold": {
+      "phase_harmonic_energy": {
+        "4": 0.22200130947441968,
+        "8": 0.3909162665728777,
+        "16": 0.7346093381662945
+      },
+      "velocity_harmonic_energy": {
+        "4": 0.009331314665417182,
+        "8": 0.060855707155490185,
+        "16": 0.3934765542573819
+      },
+      "spatial_motion_retention": {
+        "64": {
+          "motion_gain": 0.22124690130022034,
+          "motion_cosine": 0.6540651718244197
+        },
+        "128": {
+          "motion_gain": 0.586419155730773,
+          "motion_cosine": 0.9011694427580723
+        },
+        "256": {
+          "motion_gain": 0.8383867177324995,
+          "motion_cosine": 0.9756631780259883
+        }
+      },
+      "temporal_rank_90pct_at_32px": 20
+    },
+    "interference": {
+      "phase_harmonic_energy": {
+        "4": 0.3437000530921759,
+        "8": 0.6406567970645635,
+        "16": 0.8823447038478655
+      },
+      "velocity_harmonic_energy": {
+        "4": 0.03356051114610725,
+        "8": 0.1996480138334793,
+        "16": 0.5532893301533205
+      },
+      "spatial_motion_retention": {
+        "64": {
+          "motion_gain": 0.22623068025798723,
+          "motion_cosine": 0.5860409362215441
+        },
+        "128": {
+          "motion_gain": 0.538872731461549,
+          "motion_cosine": 0.8493845225528783
+        },
+        "256": {
+          "motion_gain": 0.8097951771159008,
+          "motion_cosine": 0.9702705904440755
+        }
+      },
+      "temporal_rank_90pct_at_32px": 14
+    }
+  }
+}

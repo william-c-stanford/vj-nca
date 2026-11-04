@@ -1,0 +1,84 @@
+{
+  "name": "kinetic-line-studies-v0",
+  "description": "Original kinetic light sculptures: restrained palette, black space, broad coherent line motion.",
+  "license": "CC0-1.0",
+  "code_license": "MIT",
+  "size": 512,
+  "fps": 24,
+  "duration_seconds": 8,
+  "controls": {
+    "density": {
+      "min": 5.0,
+      "max": 14.0,
+      "meaning": "carrier repetitions per normalized unit"
+    },
+    "warp": {
+      "min": 0.0,
+      "max": 0.28,
+      "meaning": "coherent spatial deformation"
+    },
+    "tilt": {
+      "min": -0.6,
+      "max": 0.6,
+      "meaning": "orientation in radians"
+    },
+    "width": {
+      "min": 0.004,
+      "max": 0.012,
+      "meaning": "half thickness in normalized coordinates"
+    },
+    "accent": {
+      "min": 0.0,
+      "max": 1.0,
+      "meaning": "acid-green accent amount"
+    },
+    "softness": {
+      "min": 0.003,
+      "max": 0.012,
+      "meaning": "soft luminous edge width in normalized coordinates"
+    }
+  },
+  "clips": [
+    {
+      "name": "aperture",
+      "shader": "aperture.frag",
+      "description": "Rounded rectangular light contours travel through a dark architectural opening with a small cyclic shear.",
+      "parameters": {
+        "density": 8.0,
+        "warp": 0.1,
+        "tilt": -0.28,
+        "width": 0.01,
+        "accent": 0.6,
+        "softness": 0.012
+      }
+    },
+    {
+      "name": "fold",
+      "shader": "fold.frag",
+      "description": "An ivory ribbed light sheet bends through one slow travelling fold; an acid-green rib marks the direction.",
+      "parameters": {
+        "density": 10.0,
+        "warp": 0.2,
+        "tilt": -0.16,
+        "width": 0.01,
+        "accent": 0.75,
+        "softness": 0.012
+      }
+    },
+    {
+      "name": "interference",
+      "shader": "interference.frag",
+      "description": "Two finite ivory line fields shear into broad moving interference bands against black; a restrained green edge carries tension.",
+      "parameters": {
+        "density": 10.0,
+        "warp": 0.13,
+        "tilt": 0.24,
+        "width": 0.01,
+        "accent": 0.45,
+        "softness": 0.012
+      }
+    }
+  ],
+  "first_training_target": "aperture",
+  "selection_rationale": "Lowest measured temporal complexity of the three original studies. Chosen as the first family; learnability remains a hypothesis until NCA training."
+}

@@ -15,6 +15,18 @@ synchronous updates fixed the earlier weak-motion result after widening alone
 failed. See the [three-trial autoresearch report](experiments/autoresearch/REPORT.md).
 This remains a 32×32 training-loop pilot, with one public clip and six procedural loops.
 
+The subsequent [native 512×512 exploration](experiments/rave-512/REPORT.md) implements
+native-pixel patch training and full-canvas evaluation, but has no accepted model.
+The detailed Electric Sheep targets were rejected on aesthetic grounds; GPU runs
+are stopped. The next proposed direction is
+[shader-generated data with program/text/control conditioning](docs/SHADER_CONDITIONING.md).
+
+Selected visual direction: **kinetic line sculptures**, starting with **Aperture**.
+See the [512×512 shader preview gallery](artifacts/shader-preview-v0/index.html),
+[aesthetic research and learning-difficulty comparison](docs/SHADER_AESTHETICS.md),
+and [deferred directions](docs/FUTURE_WORK.md). These original CC0 shader renders
+are training targets; they are not a new trained NCA artifact.
+
 Earlier artifacts: [mixed-v0](artifacts/mixed-v0/MODEL_CARD.md),
 [six procedural loops](artifacts/procedural-v0/MODEL_CARD.md), and
 [initial results](docs/EXPERIMENTS.md).
@@ -34,6 +46,20 @@ image pins its dependencies. Use `PYTHONPATH=src python -m vj_nca` instead of `v
 when running from a source checkout without installing the package.
 
 ## Start locally
+
+Render the original shader studies locally with the optional OpenGL dependency:
+
+```bash
+python -m pip install -e '.[shaders]'
+PYTHONPATH=src python scripts/render_shader_previews.py --stills-only --out runs/shader-stills
+PYTHONPATH=src python scripts/render_shader_previews.py --out runs/shader-previews
+```
+
+The tested renderer uses the local graphics GPU, with no cloud service or neural
+checkpoint. The [preset manifest](datasets/shader-preview-v0.json) declares the
+control ranges; outputs retain source, descriptions, normalized controls and
+hashes for later conditioning experiments. See the
+[preview record](artifacts/shader-preview-v0/README.md) for platform limits and checks.
 
 Create six original, smooth, seamless VJ-style test loops. Each has 32 frames at 32×32,
 played at 16 fps. One shared network learns all six with separate conditioning codes.
