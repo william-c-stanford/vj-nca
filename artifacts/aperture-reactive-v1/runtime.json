@@ -1,0 +1,8 @@
+{
+  "dataset_period": 16,
+  "dataset_fps": 64,
+  "cycle_seconds": 0.25,
+  "steps_per_frame": 1,
+  "native_size": 512,
+  "contour_advances_per_second": 4
+}

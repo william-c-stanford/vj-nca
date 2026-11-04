@@ -9,6 +9,11 @@ now passes native 512×512 motion/recovery checks with measured local throughput
 including RGB readback. This is a single-preset learned-ID baseline; semantic and
 numeric-control conditioning remain untrained.
 
+The subsequent [reactive Aperture model](../artifacts/aperture-reactive-v1/MODEL_CARD.md)
+trains against a much faster teacher (four contour advances/second at 64 fps) and
+adds true blackouts, chromatic glitches and supervised local rebuilding. This
+separates motion pace from repair duration; it does not add semantic conditioning.
+
 The user subsequently delegated visual selection. The chosen direction is
 **kinetic line sculptures**, starting with **Aperture**, based on
 [the deeper aesthetic investigation and native motion probes](SHADER_AESTHETICS.md).

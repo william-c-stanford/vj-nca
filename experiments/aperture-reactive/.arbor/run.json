@@ -1,0 +1,15 @@
+{
+  "objective": "Train four contour advances per second and visibly progressive black-circle and chromatic-glitch repair at native512",
+  "metric_direction": "max",
+  "dev_eval": "seed4041 clean cosine>=.8 gain.7..1.3; blackout.25..2.5s and glitch.1..2.5s recovery sustained16frames; core later than rim by.125s",
+  "test_eval": "freeze weights then seed9091 and different phases/corruption placements; same gates and native video inspection",
+  "material": "761508e",
+  "branching": 3,
+  "max_depth": 3,
+  "budget_cycles": 6,
+  "cycles_used": 1,
+  "best_node": "n1",
+  "best_test_score": 1.0,
+  "best_branch_ref": "artifacts/aperture-reactive-v1",
+  "created_at": 1793762302
+}

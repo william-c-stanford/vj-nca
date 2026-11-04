@@ -8,7 +8,17 @@ inspection. It does not yet implement a live VJ application or audio input.
 Read [the research and design notes](docs/RESEARCH.md) for the DyNCA, Reasoning-NCA,
 neural particle automata and frequency-time diffusion investigation.
 
-Current native-512 artifact: [aperture-fast-v1](artifacts/aperture-fast-v1/MODEL_CARD.md).
+Current native-512 artifact: [aperture-reactive-v1](artifacts/aperture-reactive-v1/MODEL_CARD.md).
+The actual training teacher now advances **four contours per second at 64 fps**,
+8× its previous speed. Large true-black circles, pink/cyan/magenta glitches,
+RGB splitting and horizontal tears train a local integrity field for visible
+spatial rebuilding. Blackout cores recover later than their rims, while beat
+flashes retain quick recovery. Frozen validation, including 32 seconds, passes
+with motion cosine 0.947. [Preview gallery](artifacts/aperture-reactive-v1/index.html)
+and [training report](experiments/aperture-reactive/REPORT.md). One preset; code/text
+conditioning and real audio input remain future work.
+
+Earlier inference-speed baseline: [aperture-fast-v1](artifacts/aperture-fast-v1/MODEL_CARD.md).
 The selected Aperture shader is now a trained **512×512 NCA**, with 144,332 parameters,
 28.02 dB PSNR, motion cosine 0.902 and passing recovery checks over a frozen 32-second
 rollout. Measured inference plus RGB readback reaches **136 fps on an M4 Max**
@@ -84,6 +94,20 @@ Use `--resume runs/aperture-pilot/train/last.pt` with a new output directory to
 continue training, or `--weights .../model.pt` for evaluation only. The released
 [model card](artifacts/aperture-fast-v1/MODEL_CARD.md) includes exact targets,
 evaluation, tempo-controlled rendering and local benchmark commands.
+
+For the current fast teacher and progressive repair recipe:
+
+```bash
+PYTHONPATH=src python scripts/prepare_reactive.py
+PYTHONPATH=src modal run --env main cloud/train_aperture.py \
+  --config configs/aperture-reactive.json --data data/aperture-reactive.npz \
+  --initialize artifacts/aperture-fast-v1/model.pt --out runs/reactive-pilot \
+  --iterations 1500 --seconds 150 --budget-usd 0.35
+```
+
+Use `scripts/evaluate_reactive.py` with the released model/targets to render
+blackout and glitch recovery at the actual 64 fps training cadence. See its
+[model card](artifacts/aperture-reactive-v1/MODEL_CARD.md) for commands and controls.
 
 Create six original, smooth, seamless VJ-style test loops. Each has 32 frames at 32×32,
 played at 16 fps. One shared network learns all six with separate conditioning codes.

@@ -1,0 +1,8 @@
+{
+  "evaluated_at_utc": "2026-11-04T03:26:40.086853+00:00",
+  "device": "mps",
+  "seed": 4041,
+  "note": "Training succeeded and weights downloaded before the initial cloud evaluator failed. The corrected region-mask evaluator was rerun locally on the exact saved weights.",
+  "weights_sha256": "60d87d45b7dbac9363aa579580ab054244997fc6018de9351c1397e49053dbb5",
+  "evaluator_sha256": "73b4f098ace4b2ce923eadd37e4a03237e375486bbf171b21046abf84e434b53"
+}

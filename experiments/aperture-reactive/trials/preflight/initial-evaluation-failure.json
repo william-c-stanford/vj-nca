@@ -1,0 +1,4 @@
+{
+  "error": "too many indices for tensor of dimension 3",
+  "traceback": "Traceback (most recent call last):\n  File \"/root/train_aperture.py\", line 107, in run_trial\n    metrics = evaluate_repair(\n              ^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 120, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/vj_nca/repair_eval.py\", line 101, in evaluate_repair\n    [\n  File \"/root/vj_nca/repair_eval.py\", line 106, in <genexpr>\n    (rgbs[\"blackout\"] - clean).square().mean(1)[m].mean() / 4\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nIndexError: too many indices for tensor of dimension 3\n"
+}

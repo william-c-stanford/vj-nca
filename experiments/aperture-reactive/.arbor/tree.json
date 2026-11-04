@@ -1,0 +1,38 @@
+{
+  "_counter": 1,
+  "root": "n0",
+  "nodes": {
+    "n0": {
+      "id": "n0",
+      "parent": null,
+      "depth": 0,
+      "status": "root",
+      "hypothesis": "Train four contour advances per second and visibly progressive black-circle and chromatic-glitch repair at native512",
+      "insight": "[from n1] Motion speed and repair duration need separate control. Train against the larger per-step phase advance, and condition local relaxation on mutable integrity rather than slowing all RGB updates or only retiming a preview.",
+      "metadata": {
+        "dev_score": null,
+        "test_score": null,
+        "result": "",
+        "branch_ref": null
+      },
+      "created_at": 1793762302,
+      "updated_at": 1793762800
+    },
+    "n1": {
+      "id": "n1",
+      "parent": "n0",
+      "depth": 1,
+      "status": "merged",
+      "hypothesis": "A local learned integrity field and progressive damage curriculum preserve the fast teacher while producing spatially ordered slower recovery from real blackouts and chromatic glitches",
+      "insight": "A separately learned local integrity rule permits progressive spatial repair while healthy cells retain fast phase-tracking. Whole-state blackouts must use RGB=-1; retaining integrity for brightness beats permits quick transient recovery.",
+      "metadata": {
+        "dev_score": 1.0,
+        "test_score": 1.0,
+        "result": "1500 updates: fast teacher64fps16frames, PSNR25.33dB, motion cosine.947 gain.858. Blackout.453s with rim.281s/core.578s; chromatic damage.156-.219s, beat.031s. All fixed development gates pass. Cloud mask indexing bug fixed and evaluation rerun on exact weights locally. Function estimate0.0408USD.",
+        "branch_ref": "artifacts/aperture-reactive-v1"
+      },
+      "created_at": 1793762302,
+      "updated_at": 1793762854
+    }
+  }
+}

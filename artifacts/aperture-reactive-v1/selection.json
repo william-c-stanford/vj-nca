@@ -1,0 +1,35 @@
+{
+  "frozen_at_utc": "2026-11-04T03:25:42.334900+00:00",
+  "weights_sha256": "60d87d45b7dbac9363aa579580ab054244997fc6018de9351c1397e49053dbb5",
+  "node": "n1",
+  "training_step": 1500,
+  "dev_seed": 4041,
+  "validation_seeds": [
+    9091,
+    9092,
+    9093
+  ],
+  "validation_phases": [
+    4,
+    8,
+    12
+  ],
+  "circles": [
+    [
+      0.4,
+      0.05,
+      0.68
+    ],
+    [
+      -0.3,
+      0.1,
+      0.72
+    ],
+    [
+      0,
+      -0.4,
+      0.6
+    ]
+  ],
+  "selection": "First small warm-start pilot passes all fixed fast-motion, spatial-growth and progressive-recovery gates; no further training or selection using validation."
+}

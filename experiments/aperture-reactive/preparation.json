@@ -1,0 +1,20 @@
+{
+  "shape": [
+    1,
+    16,
+    3,
+    512,
+    512
+  ],
+  "fps": 64.0,
+  "cycle_seconds": 0.25,
+  "fingerprint": "cd72a92df1f22e75a495c5b42e89aaa8462bf831f80fb34a33231a9f6dd0b611",
+  "file_sha256": "0490f3e13e5670d6effb74c5f6f9329bffbd88b25590493bfdbf2019729a1a97",
+  "diagnostics": {
+    "aperture": {
+      "seam_mse": 0.17345398664474487,
+      "adjacent_mse": 0.1109476312994957,
+      "seam_ratio": 1.5633859634399414
+    }
+  }
+}

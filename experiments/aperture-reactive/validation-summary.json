@@ -1,0 +1,106 @@
+[
+  {
+    "case": "validation-9091",
+    "clean": {
+      "mse": 0.0029342501825976326,
+      "psnr": 25.325028597192333,
+      "motion_cosine": 0.9474354849106582,
+      "motion_gain": 0.8575090443710656,
+      "relative_temporal_error": 0.10415971658274958,
+      "eligible": true
+    },
+    "recovery_seconds": {
+      "blackout": 0.46875,
+      "glitch": 0.21875,
+      "rgb-split": 0.234375,
+      "tear": 0.140625,
+      "beat": 0.03125,
+      "noise": 0.015625,
+      "full-reset": 1.703125
+    },
+    "regional": {
+      "rim": 0.28125,
+      "core": 0.578125
+    },
+    "spatial": true,
+    "passed": true
+  },
+  {
+    "case": "validation-9092",
+    "clean": {
+      "mse": 0.002923895019212728,
+      "psnr": 25.340382245305577,
+      "motion_cosine": 0.9474355258839942,
+      "motion_gain": 0.8575091185397189,
+      "relative_temporal_error": 0.10415973640349398,
+      "eligible": true
+    },
+    "recovery_seconds": {
+      "blackout": 0.46875,
+      "glitch": 0.25,
+      "rgb-split": 0.21875,
+      "tear": 0.25,
+      "beat": 0.03125,
+      "noise": 0.015625,
+      "full-reset": 1.671875
+    },
+    "regional": {
+      "rim": 0.296875,
+      "core": 0.640625
+    },
+    "spatial": true,
+    "passed": true
+  },
+  {
+    "case": "validation-9093",
+    "clean": {
+      "mse": 0.002922593588202497,
+      "psnr": 25.342315728302328,
+      "motion_cosine": 0.947435671465265,
+      "motion_gain": 0.8575092050328631,
+      "relative_temporal_error": 0.10415974721513699,
+      "eligible": true
+    },
+    "recovery_seconds": {
+      "blackout": 0.359375,
+      "glitch": 0.125,
+      "rgb-split": 0.171875,
+      "tear": 0.109375,
+      "beat": 0.03125,
+      "noise": 0.015625,
+      "full-reset": 1.625
+    },
+    "regional": {
+      "rim": 0.25,
+      "core": 0.5
+    },
+    "spatial": true,
+    "passed": true
+  },
+  {
+    "case": "ablation-repair",
+    "clean": {
+      "mse": 0.0029295289507763065,
+      "psnr": 25.33202205763558,
+      "motion_cosine": 0.947435671465265,
+      "motion_gain": 0.8575092050328631,
+      "relative_temporal_error": 0.10415973640349398,
+      "eligible": true
+    },
+    "recovery_seconds": {
+      "blackout": 0.046875,
+      "glitch": 0.03125,
+      "rgb-split": 0.03125,
+      "tear": 0.03125,
+      "beat": 0.03125,
+      "noise": 0.015625,
+      "full-reset": 0.046875
+    },
+    "regional": {
+      "rim": 0.046875,
+      "core": 0.0625
+    },
+    "spatial": false,
+    "passed": false
+  }
+]

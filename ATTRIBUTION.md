@@ -20,6 +20,11 @@ The Aperture-only weights in `artifacts/aperture-fast-v1` and
 dataset and rendered media are CC0-1.0. These runs use no Electric Sheep or public
 plasma data, pretrained weights or reference-artist footage.
 
+The same licenses apply to `artifacts/aperture-reactive-v1` and
+`experiments/aperture-reactive/trials`. Its faster teacher samples every fourth
+frame of the original Aperture float32 targets and uses a 0.25-second period at 64 fps.
+Blackout/glitch previews are outputs of the trained state-damage/repair model.
+
 The public pilot includes **-PLASMA-ColorCycling.Gif**, by **Ósemkowski**, obtained from
 [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:-PLASMA-ColorCycling.Gif),
 under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Changes: center square

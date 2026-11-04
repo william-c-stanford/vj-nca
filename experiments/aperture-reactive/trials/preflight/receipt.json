@@ -1,0 +1,23 @@
+{
+  "status": "evaluation-failed",
+  "gpu": "NVIDIA A10",
+  "source_sha256": "25e4d1922e7ad7c2fcb87bc270272404f7bf01e04cdabf361422ad98a862d974",
+  "data_sha256": "0490f3e13e5670d6effb74c5f6f9329bffbd88b25590493bfdbf2019729a1a97",
+  "dataset_fingerprint": "cd72a92df1f22e75a495c5b42e89aaa8462bf831f80fb34a33231a9f6dd0b611",
+  "input_weights_sha256": null,
+  "resume_sha256": null,
+  "initialize_sha256": "9314990225bbf00875ca65831ae6d5cdb05684ce11ead203d5b857d872b9cebe",
+  "function_seconds": 116.510914223,
+  "estimated_function_usd": 0.04077415954148108,
+  "peak_cuda_bytes": 1282230272,
+  "evaluation": {
+    "seed": 4041,
+    "cycles": 2,
+    "phase_frame": 0
+  },
+  "price_checked": "2026-11-03",
+  "summary": {
+    "error": "too many indices for tensor of dimension 3",
+    "traceback": "Traceback (most recent call last):\n  File \"/root/train_aperture.py\", line 107, in run_trial\n    metrics = evaluate_repair(\n              ^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/site-packages/torch/utils/_contextlib.py\", line 120, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/vj_nca/repair_eval.py\", line 101, in evaluate_repair\n    [\n  File \"/root/vj_nca/repair_eval.py\", line 106, in <genexpr>\n    (rgbs[\"blackout\"] - clean).square().mean(1)[m].mean() / 4\n    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nIndexError: too many indices for tensor of dimension 3\n"
+  }
+}
