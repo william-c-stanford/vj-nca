@@ -34,6 +34,11 @@ class TrainConfig:
     plane_resolution: int = 128
     plane_time_resolution: int = 64
     direct_rgb: bool = False
+    repair_channel: bool = False
+    repair_radius: int = 8
+    repair_rate: float = 0.18
+    repair_threshold: float = 0.15
+    repair_learning_rate: float = 0.02
     patch_size: int = 0
     loss_margin: int = 0
     patch_edge_probability: float = 0.5
@@ -200,6 +205,9 @@ def save_checkpoint(
         "pool": pool.state_dict(),
         "loop_names": dataset.names,
         "dataset_fingerprint": fingerprint,
+        "dataset_period": dataset.period,
+        "dataset_fps": dataset.fps,
+        "dataset_size": dataset.size,
         "rng": {
             "torch": torch.get_rng_state(),
             "python": random.getstate(),
@@ -216,6 +224,8 @@ def train(
     dataset: LoopDataset, config: TrainConfig, output: Path, resume: Path | None = None
 ) -> Path:
     config.__post_init__()
+    if config.repair_channel:
+        raise ValueError("Use train_repair for supervised morphological recovery")
     if dataset.size < max(config.perception_scales) * 2:
         raise ValueError("Canvas too small for the chosen perception scales")
     if config.batch_size > len(dataset.names) * config.pool_per_loop:

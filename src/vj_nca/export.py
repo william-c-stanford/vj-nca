@@ -20,6 +20,9 @@ def export_weights(checkpoint: Path, output: Path) -> Path:
         "steps_per_frame": saved["train_config"]["steps_per_frame"],
         "dataset_fingerprint": saved["dataset_fingerprint"],
     }
+    for key in ("dataset_period", "dataset_fps", "dataset_size"):
+        if key in saved:
+            payload[key] = saved[key]
     torch.save(payload, target)
     # The released artifact must load using PyTorch's restricted tensor loader.
     torch.load(target, map_location="cpu", weights_only=True)

@@ -43,6 +43,7 @@ def run_trial(
     eval_cycles: int,
     phase_frame: int,
     resume: bytes | None,
+    initialize: bytes | None,
 ) -> Iterator[bytes]:
     import shutil
     import tempfile
@@ -79,7 +80,19 @@ def run_trial(
             resume_path = root / "resume.pt" if resume else None
             if resume_path:
                 resume_path.write_bytes(resume)
-            checkpoint = train(dataset, config, root / "train", resume=resume_path)
+            if config.repair_channel:
+                from vj_nca.repair_train import train_repair
+
+                init_path = root / "initialize.pt" if initialize else None
+                if init_path:
+                    init_path.write_bytes(initialize)
+                checkpoint = train_repair(
+                    dataset, config, root / "train", resume=resume_path, initialize=init_path
+                )
+            else:
+                if initialize:
+                    raise ValueError("Initialization is supported by the repair recipe")
+                checkpoint = train(dataset, config, root / "train", resume=resume_path)
             export_weights(checkpoint, root / "weights")
             yield archive_directory(root / "train", prefix="train")
             yield archive_directory(root / "weights", prefix="weights")
@@ -88,16 +101,37 @@ def run_trial(
             checkpoint.write_bytes(weights)
         status = "complete"
         try:
-            metrics = evaluate_streaming(
-                checkpoint,
-                dataset,
-                root / "eval",
-                device="cuda",
-                seed=eval_seed,
-                cycles=eval_cycles,
-                phase_frame=phase_frame,
-            )
-            summary = {k: metrics[k] for k in ("mean_mse", "mean_psnr", "passing_loops")}
+            checkpoint_config = torch.load(checkpoint, map_location="cpu", weights_only=False)[
+                "model_config"
+            ]
+            if checkpoint_config.get("repair_channel"):
+                from vj_nca.repair_eval import evaluate_repair
+
+                metrics = evaluate_repair(
+                    checkpoint,
+                    dataset,
+                    root / "eval",
+                    device="cuda",
+                    seed=eval_seed,
+                    frames=max(192, eval_cycles * dataset.period),
+                    phase_frame=phase_frame,
+                )
+                summary = {
+                    "mean_mse": metrics["clean"]["mse"],
+                    "mean_psnr": metrics["clean"]["psnr"],
+                    "passing_loops": int(metrics["quality_and_recovery_pass"]),
+                }
+            else:
+                metrics = evaluate_streaming(
+                    checkpoint,
+                    dataset,
+                    root / "eval",
+                    device="cuda",
+                    seed=eval_seed,
+                    cycles=eval_cycles,
+                    phase_frame=phase_frame,
+                )
+                summary = {k: metrics[k] for k in ("mean_mse", "mean_psnr", "passing_loops")}
         except Exception as exc:
             status = "evaluation-failed"
             summary = {"error": str(exc), "traceback": traceback.format_exc()}
@@ -114,6 +148,7 @@ def run_trial(
             "dataset_fingerprint": dataset.fingerprint(),
             "input_weights_sha256": hashlib.sha256(weights).hexdigest() if weights else None,
             "resume_sha256": hashlib.sha256(resume).hexdigest() if resume else None,
+            "initialize_sha256": hashlib.sha256(initialize).hexdigest() if initialize else None,
             "function_seconds": elapsed,
             "estimated_function_usd": elapsed * (rate + 2 * 0.0000131 + 8 * 0.00000222),
             "peak_cuda_bytes": torch.cuda.max_memory_allocated(),
@@ -138,6 +173,7 @@ def main(
     eval_cycles: int = 2,
     phase_frame: int = 0,
     resume: str = "",
+    initialize: str = "",
 ):
     from vj_nca.artifacts import extract_archive
 
@@ -152,10 +188,12 @@ def main(
         raise FileExistsError("Choose an empty trial directory")
     content, weight_bytes = Path(data).read_bytes(), Path(weights).read_bytes() if weights else None
     resume_bytes = Path(resume).read_bytes() if resume else None
-    if weights and resume:
-        raise ValueError("Use either evaluation-only weights or a training resume checkpoint")
+    init_bytes = Path(initialize).read_bytes() if initialize else None
+    if sum(bool(x) for x in (weights, resume, initialize)) > 1:
+        raise ValueError("Choose evaluation-only weights, an exact resume or initialization")
     if len(content) > 64 * 1024**2 or any(
-        item is not None and len(item) > 32 * 1024**2 for item in (weight_bytes, resume_bytes)
+        item is not None and len(item) > 32 * 1024**2
+        for item in (weight_bytes, resume_bytes, init_bytes)
     ):
         raise ValueError("Transfer cap: 64MiB dataset and 32MiB checkpoint")
     settings = json.loads(Path(config).read_text())
@@ -176,6 +214,7 @@ def main(
         "timeout_estimate_usd": TIMEOUT * MAX_RATE,
         "input_weights_sha256": hashlib.sha256(weight_bytes).hexdigest() if weight_bytes else None,
         "resume_sha256": hashlib.sha256(resume_bytes).hexdigest() if resume_bytes else None,
+        "initialize_sha256": hashlib.sha256(init_bytes).hexdigest() if init_bytes else None,
         "evaluation": {"seed": eval_seed, "cycles": eval_cycles, "phase_frame": phase_frame},
     }
     (target / "submission.json").write_text(json.dumps(submission, indent=2) + "\n")
@@ -192,6 +231,7 @@ def main(
             eval_cycles,
             phase_frame,
             resume_bytes,
+            init_bytes,
         )
     ):
         extract_archive(bundle, target)

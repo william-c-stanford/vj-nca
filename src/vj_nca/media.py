@@ -1,4 +1,5 @@
 import subprocess
+import tempfile
 from itertools import pairwise
 from pathlib import Path
 
@@ -6,6 +7,70 @@ import numpy as np
 import torch
 from PIL import Image
 from torch import Tensor
+
+
+class VideoWriter:
+    """Stream native RGB panels to FFmpeg without retaining an entire rollout."""
+
+    def __init__(self, path: Path, width: int, height: int, fps: float):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        self.width, self.height = width, height
+        self.errors = tempfile.TemporaryFile()
+        self.process = subprocess.Popen(
+            [
+                "ffmpeg",
+                "-y",
+                "-v",
+                "error",
+                "-f",
+                "rawvideo",
+                "-pix_fmt",
+                "rgb24",
+                "-s",
+                f"{width}x{height}",
+                "-r",
+                str(fps),
+                "-i",
+                "pipe:0",
+                "-an",
+                "-c:v",
+                "libx264",
+                "-threads",
+                "2",
+                "-pix_fmt",
+                "yuv420p",
+                "-movflags",
+                "+faststart",
+                str(path),
+            ],
+            stdin=subprocess.PIPE,
+            stderr=self.errors,
+        )
+
+    def write(self, frame: Tensor):
+        if tuple(frame.shape) != (3, self.height, self.width):
+            raise ValueError("Frame shape differs from writer geometry")
+        pixels = ((frame.detach().clamp(-1, 1) + 1) * 127.5).round().byte()
+        self.process.stdin.write(pixels.permute(1, 2, 0).cpu().contiguous().numpy().tobytes())
+
+    def close(self):
+        try:
+            self.process.stdin.close()
+            code = self.process.wait(timeout=120)
+            if code:
+                self.errors.seek(0)
+                raise RuntimeError(self.errors.read().decode(errors="replace"))
+        finally:
+            if self.process.poll() is None:
+                self.process.kill()
+                self.process.wait()
+            self.errors.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, kind, value, traceback):
+        self.close()
 
 
 def save_video(path: Path, video: Tensor, fps: float, zoom: int = 1):

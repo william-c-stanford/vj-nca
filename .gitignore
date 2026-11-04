@@ -9,7 +9,9 @@ runs/
 *.pt
 *.npz
 !artifacts/aperture-fast-v1/targets.npz
+!artifacts/aperture-reactive-v1/targets.npz
 !artifacts/*/model.pt
 !experiments/autoresearch/trials/*/model.pt
 !experiments/rave-512/trials/*/model.pt
 !experiments/aperture-fast/trials/*/model.pt
+!experiments/aperture-reactive/trials/*/model.pt

@@ -24,6 +24,10 @@ class ModelConfig:
     plane_resolution: int = 128
     plane_time_resolution: int = 64
     direct_rgb: bool = False
+    repair_channel: bool = False
+    repair_radius: int = 8
+    repair_rate: float = 0.18
+    repair_threshold: float = 0.15
 
     def __post_init__(self):
         self.perception_scales = tuple(self.perception_scales)
@@ -34,8 +38,17 @@ class ModelConfig:
             raise ValueError("fire_rate must be in (0, 1]")
         if self.hidden_norm not in {"none", "unit_ball"}:
             raise ValueError("hidden_norm must be none or unit_ball")
-        if self.hidden_norm == "unit_ball" and (self.channels - 3) % self.norm_groups:
+        hidden_channels = self.channels - 3 - int(self.repair_channel)
+        if self.hidden_norm == "unit_ball" and hidden_channels % self.norm_groups:
             raise ValueError("Hidden state channels must divide evenly into norm_groups")
+        if self.repair_channel and (hidden_channels < 1 or not self.direct_rgb):
+            raise ValueError("Repair needs hidden state and direct_rgb")
+        if self.repair_channel and self.repair_rate <= 0.002:
+            raise ValueError("Repair rate must exceed the initial spontaneous growth of .002")
+        if self.repair_radius < 1 or not 0 < self.repair_rate <= 1:
+            raise ValueError("Use positive repair radius and rate in (0,1]")
+        if not 0 <= self.repair_threshold < 1:
+            raise ValueError("repair_threshold must be in [0,1)")
         if not self.perception_scales or min(self.perception_scales) < 1:
             raise ValueError("perception_scales are positive downsampling factors")
         if self.hidden_layers < 1 or any(f <= 0 for f in self.spatial_frequencies):
@@ -75,8 +88,16 @@ class ConditionedNCA(nn.Module):
                 for layer in (nn.Conv2d(config.hidden, config.hidden, 1), nn.ReLU())
             ]
         )
-        self.update_out = nn.Conv2d(config.hidden, config.channels, 1, bias=False)
+        self.update_out = nn.Conv2d(
+            config.hidden, config.channels - int(config.repair_channel), 1, bias=False
+        )
         nn.init.zeros_(self.update_out.weight)
+        if config.repair_channel:
+            self.repair_head = nn.Sequential(nn.Conv2d(3, 8, 1), nn.ReLU(), nn.Conv2d(8, 1, 1))
+            nn.init.zeros_(self.repair_head[-1].weight)
+            nn.init.constant_(
+                self.repair_head[-1].bias, math.log(0.002 / (config.repair_rate - 0.002))
+            )
         sx = torch.tensor([[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]], dtype=torch.float32) / 8
         lap = torch.tensor([[1, 2, 1], [2, -12, 2], [1, 2, 1]], dtype=torch.float32) / 16
         identity = torch.zeros(3, 3)
@@ -85,7 +106,21 @@ class ConditionedNCA(nn.Module):
         self.register_buffer("kernels", kernels.repeat(config.channels, 1, 1, 1))
 
     def seed(self, batch: int, size: int, device: torch.device | str) -> Tensor:
-        return torch.zeros(batch, self.config.channels, size, size, device=device)
+        state = torch.zeros(batch, self.config.channels, size, size, device=device)
+        if self.config.repair_channel:
+            state[:, :3] = -1
+            state[:, -1:] = 1
+        return state
+
+    def repair_features(self, state: Tensor) -> tuple[Tensor, Tensor, Tensor]:
+        support = state[:, -1:].clamp(0, 1)
+        radius = self.config.repair_radius
+        padded = F.pad(support, (radius,) * 4, mode="replicate")
+        return (
+            support,
+            F.max_pool2d(padded, 2 * radius + 1, stride=1),
+            F.avg_pool2d(padded, 2 * radius + 1, stride=1),
+        )
 
     def perceive(self, state: Tensor) -> Tensor:
         h, w = state.shape[-2:]
@@ -190,17 +225,32 @@ class ConditionedNCA(nn.Module):
         delta = self.update_out(self.update_hidden(features))
         if mask is None:
             mask = (torch.rand_like(state[:, :1]) < self.config.fire_rate).to(state.dtype)
-        updated = state + delta
+        updated = state[:, : delta.shape[1]] + delta
         if self.config.direct_rgb:
             # Visible channels track the current phase directly. Hidden channels
             # retain the residual local dynamics, without integrating RGB bias
             # for hundreds of steps into a color drift.
             updated = torch.cat([delta[:, :3], updated[:, 3:]], dim=1)
+        if self.config.repair_channel:
+            # A mutable local repair state controls visible relaxation. Its rate
+            # is learned from neighboring state, with a bounded per-step change.
+            growth = (
+                self.config.repair_rate
+                * self.repair_head(torch.cat(self.repair_features(state), 1)).sigmoid()
+            )
+            support = (state[:, -1:] + growth).clamp(0, 1)
+            rate = (
+                (support - self.config.repair_threshold) / (1 - self.config.repair_threshold)
+            ).clamp(0, 1)
+            rgb = state[:, :3] + rate * (updated[:, :3] - state[:, :3])
+            updated = torch.cat([rgb, updated[:, 3:], support], dim=1)
         if self.config.hidden_norm == "unit_ball":
             b, _, h, w = updated.shape
-            hidden = updated[:, 3:].reshape(b, self.config.norm_groups, -1, h, w)
+            end = -1 if self.config.repair_channel else updated.shape[1]
+            hidden = updated[:, 3:end].reshape(b, self.config.norm_groups, -1, h, w)
             hidden = (hidden / hidden.norm(dim=2, keepdim=True).clamp_min(1)).flatten(1, 2)
-            updated = torch.cat([updated[:, :3], hidden], dim=1)
+            tail = [updated[:, -1:]] if self.config.repair_channel else []
+            updated = torch.cat([updated[:, :3], hidden, *tail], dim=1)
         return state + mask * (updated - state)
 
     @staticmethod

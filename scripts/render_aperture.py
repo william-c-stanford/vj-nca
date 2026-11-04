@@ -27,6 +27,8 @@ def main():
     torch.set_num_threads(2)
     torch.manual_seed(6061)
     saved = torch.load(args.weights, map_location="cpu", weights_only=True)
+    if saved["model_config"].get("repair_channel"):
+        raise ValueError("Use evaluate_reactive.py for the faster teacher's native cadence")
     if saved["loop_names"] != ["aperture"]:
         raise ValueError("This preview recipe requires the single-preset Aperture model")
     model = ConditionedNCA(ModelConfig(**saved["model_config"])).to(args.device).eval()
