@@ -1,0 +1,12 @@
+{
+  "weights_sha256": "9314990225bbf00875ca65831ae6d5cdb05684ce11ead203d5b857d872b9cebe",
+  "resolution": 512,
+  "bpm": 150.0,
+  "beats_per_cycle": 4,
+  "cycle_seconds": 1.6,
+  "video_fps": 40.0,
+  "cycles": 4,
+  "synthetic_state_kicks": true,
+  "seed": 6061,
+  "note": "Offline export at a chosen playback tempo; inference timing is measured separately. Synthetic brightness/latent kicks, no audio analysis."
+}

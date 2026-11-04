@@ -1,0 +1,26 @@
+{
+  "device": "mps:0",
+  "platform": "macOS-15.4.1-arm64-arm-64bit",
+  "torch": "2.8.0",
+  "size": 512,
+  "parameters": 12236,
+  "samples": 120,
+  "warmup": 32,
+  "steps_per_frame": 1,
+  "period_frames": 64,
+  "scope": "NCA update(s) and optional native uint8 RGB CPU readback; excludes display, audio input, encoding, application overhead and frame pacing. No CPU fallback enabled.",
+  "gpu_resident": {
+    "mean_ms_per_frame": 7.019985074999999,
+    "p50_ms_per_frame": 6.5739795,
+    "p95_ms_per_frame": 9.01191845,
+    "frames_per_second": 142.45044530952939,
+    "mean_ms_per_update": 7.019985074999999
+  },
+  "rgb_readback": {
+    "mean_ms_per_frame": 6.586747641666666,
+    "p50_ms_per_frame": 6.554167,
+    "p95_ms_per_frame": 7.002668099999999,
+    "frames_per_second": 151.81999590726187,
+    "mean_ms_per_update": 6.586747641666666
+  }
+}

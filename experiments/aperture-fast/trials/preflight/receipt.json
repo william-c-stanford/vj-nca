@@ -1,0 +1,22 @@
+{
+  "status": "complete",
+  "gpu": "NVIDIA A10G",
+  "source_sha256": "afe122cc1316367ff5858dd2992a3aa0e3e41535c36f0570919ac01a31c1505e",
+  "data_sha256": "90a8434c364c0ff43c91cd6c3fba6fc2b638099f8235737d8ef1898c907eb2c2",
+  "dataset_fingerprint": "c7a5b2383cb1712f72701df554a57abe01a00a4e3a77ab8b93ab56139b1cbd54",
+  "input_weights_sha256": null,
+  "function_seconds": 108.82954425599999,
+  "estimated_function_usd": 0.038085987307829756,
+  "peak_cuda_bytes": 696308224,
+  "evaluation": {
+    "seed": 4041,
+    "cycles": 2,
+    "phase_frame": 0
+  },
+  "price_checked": "2026-11-03",
+  "summary": {
+    "mean_mse": 0.05551267253567082,
+    "mean_psnr": 12.556078640110472,
+    "passing_loops": 0
+  }
+}

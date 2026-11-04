@@ -1,0 +1,42 @@
+[
+  {
+    "trial": "preflight",
+    "iterations": 3000,
+    "function_seconds": 108.82954425599999,
+    "estimated_function_usd": 0.038085987307829756,
+    "psnr": 12.556078640110472,
+    "motion_cosine": 0.07583972567777264,
+    "motion_gain": 0.020925110626925796,
+    "passes": false
+  },
+  {
+    "trial": "compact-long",
+    "iterations": 18000,
+    "function_seconds": 503.70854023299995,
+    "estimated_function_usd": 0.17627784073994068,
+    "psnr": 17.273629972063947,
+    "motion_cosine": 0.5097285841543202,
+    "motion_gain": 0.3389598180635114,
+    "passes": false
+  },
+  {
+    "trial": "planes-preflight",
+    "iterations": 4000,
+    "function_seconds": 137.953537412,
+    "estimated_function_usd": 0.048278219952703524,
+    "psnr": 22.06053218629893,
+    "motion_cosine": 0.7226147046291456,
+    "motion_gain": 0.610251836068169,
+    "passes": true
+  },
+  {
+    "trial": "planes-refined",
+    "iterations": 11546,
+    "function_seconds": 313.070380632,
+    "estimated_function_usd": 0.10956211040597473,
+    "psnr": 28.00921332408008,
+    "motion_cosine": 0.9017285900048158,
+    "motion_gain": 0.8379739474367714,
+    "passes": true
+  }
+]

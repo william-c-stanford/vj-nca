@@ -1,0 +1,27 @@
+{
+  "device": "Apple M4 Max MPS",
+  "note": "Warmup6 timed24, GPU resident tensors without RGB readback. Proposed compact model untrained. Plane baseline cannot run because PyTorch2.8 MPS lacks border grid sampling; deep no-plane model is the measured baseline.",
+  "results": [
+    {
+      "name": "previous-deep-512",
+      "size": 512,
+      "parameters": 196656,
+      "resident_ms_per_update": 28.94068404081433,
+      "resident_updates_per_second": 34.55343344993936
+    },
+    {
+      "name": "compact-512",
+      "size": 512,
+      "parameters": 12236,
+      "resident_ms_per_update": 6.086251751791376,
+      "resident_updates_per_second": 164.30473808541825
+    },
+    {
+      "name": "compact-128",
+      "size": 128,
+      "parameters": 12236,
+      "resident_ms_per_update": 0.6853871648975959,
+      "resident_updates_per_second": 1459.0293650296335
+    }
+  ]
+}

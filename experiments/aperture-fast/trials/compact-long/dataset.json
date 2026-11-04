@@ -1,0 +1,49 @@
+{
+  "names": [
+    "aperture"
+  ],
+  "fingerprint": "c7a5b2383cb1712f72701df554a57abe01a00a4e3a77ab8b93ab56139b1cbd54",
+  "sources": [
+    {
+      "kind": "original-shader",
+      "license": "CC0-1.0",
+      "cycle_seconds": 2,
+      "preview_speed_multiplier": 4.0,
+      "name": "aperture",
+      "shader": "aperture.frag",
+      "description": "Rounded rectangular light contours travel through a dark architectural opening with a small cyclic shear.",
+      "parameters": {
+        "density": 8.0,
+        "warp": 0.1,
+        "tilt": -0.28,
+        "width": 0.01,
+        "accent": 0.6,
+        "softness": 0.012
+      },
+      "normalized_controls": {
+        "density": 0.3333333333333333,
+        "warp": 0.35714285714285715,
+        "tilt": 0.26666666666666666,
+        "width": 0.75,
+        "accent": 0.6,
+        "softness": 1.0
+      },
+      "source_sha256": "4aaf3f837e1f761059f1267b03517a4e92175081d00ba3fd9d9733f70e6759db",
+      "description_sha256": "1275a129f65aae5cacf97a48149eddaa95e5f448b1e88fff3c3d69047913eb81",
+      "vertex_sha256": "2ada95fa82e20fe1aeed24494914268816849d7a1baa50b3c38570a4769399b9",
+      "renderer": "Apple M4 Max",
+      "opengl_version": "4.1 Metal - 89.4",
+      "moderngl_version": "5.13.0",
+      "glcontext_version": "3.1.0",
+      "renderer_source_sha256": "e9aa567cc29dcb31faae1b64659fbc9ebbd5e3305ea3f20875546b0561f297b6"
+    }
+  ],
+  "shape": [
+    1,
+    64,
+    3,
+    512,
+    512
+  ],
+  "fps": 32.0
+}

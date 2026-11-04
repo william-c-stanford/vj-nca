@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aperture · trained 512 study</title>
+<style>
+  :root { color-scheme:dark; font-family:system-ui,sans-serif; background:#0b0c0b; color:#e4e8df; }
+  body { max-width:1080px; margin:0 auto; padding:40px 24px 60px; }
+  h1 { font-size:clamp(32px,5vw,54px); font-weight:500; letter-spacing:-.04em; margin:8px 0 16px; }
+  p { line-height:1.6; max-width:760px; color:#b4baae; }
+  a { color:#c2ef74; }
+  .kicker, label { font-size:12px; text-transform:uppercase; letter-spacing:.14em; color:#c2ef74; }
+  .pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin:32px 0; }
+  figure { margin:0; }
+  video { display:block; width:100%; background:black; }
+  figcaption { font-size:14px; color:#b4baae; padding:12px 0; }
+  .tempo { display:flex; align-items:center; gap:18px; flex-wrap:wrap; padding:18px 0; }
+  input { accent-color:#b9ed6c; width:220px; }
+  output { font-variant-numeric:tabular-nums; }
+  .facts { border-block:1px solid #2b3027; padding:18px 0; margin:28px 0; }
+  .facts strong { color:#e4e8df; font-weight:500; }
+  footer { margin-top:32px; font-size:14px; }
+  @media(max-width:660px) { .pair { grid-template-columns:1fr; } body { padding:28px 16px; } }
+</style>
+<main>
+  <div class="kicker">Neural cellular automata · 512 × 512</div>
+  <h1>Aperture, moving faster.</h1>
+  <p>One trained loop with carried local state. Four beats per cycle: the original
+    eight-second shader preview becomes 1.6 seconds here at 150BPM.</p>
+  <div class="tempo">
+    <label for="tempo">Preview tempo</label>
+    <input id="tempo" type="range" min="60" max="180" step="1" value="150">
+    <output id="tempo-value" for="tempo">150 BPM</output>
+  </div>
+  <div class="pair">
+    <figure>
+      <video data-tempo src="preview-150bpm.mp4" poster="frame.png" autoplay loop muted controls playsinline></video>
+      <figcaption>Trained model · 144,332 parameters</figcaption>
+    </figure>
+    <figure>
+      <video data-tempo src="beat-recovery.mp4" autoplay loop muted controls playsinline></video>
+      <figcaption>Synthetic brightness and latent kicks on every beat · no audio input</figcaption>
+    </figure>
+  </div>
+  <p class="facts"><strong>136fps</strong> measured inference + RGB readback on M4 Max,
+    <strong>7.7ms</strong> p95. Frozen 32-second test: <strong>28.02dB</strong>,
+    motion cosine <strong>0.902</strong>, all recovery checks pass.
+    Offline playback and the tempo slider are separate from this benchmark;
+    display and audio processing are excluded.</p>
+  <figure>
+    <video src="comparison.mp4" loop muted controls playsinline></video>
+    <figcaption>Original shader / trained model / erased and recovering · native 512-pixel panels,
+      original training playback at 120BPM</figcaption>
+  </figure>
+  <footer>
+    <p>This is one shader preset with an external phase clock. Code/text conditioning,
+      unseen-loop generalization and a live VJ application remain future work.</p>
+    <p><a href="MODEL_CARD.md">Model and reproduction</a> ·
+      <a href="benchmark.json">Timing evidence</a> ·
+      <a href="../../experiments/aperture-fast/REPORT.md">Four-trial report</a> ·
+      <a href="target.mp4">Original target</a></p>
+  </footer>
+</main>
+<script>
+  const tempo = document.getElementById('tempo');
+  tempo.addEventListener('input', () => {
+    document.getElementById('tempo-value').value = `${tempo.value} BPM`;
+    document.querySelectorAll('video[data-tempo]').forEach(video => {
+      video.playbackRate = Number(tempo.value) / 150;
+    });
+  });
+</script>
+</html>

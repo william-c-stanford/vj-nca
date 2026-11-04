@@ -1,0 +1,31 @@
+{
+  "device": "mps:0",
+  "platform": "macOS-15.4.1-arm64-arm-64bit",
+  "torch": "2.8.0",
+  "size": 512,
+  "parameters": 144332,
+  "samples": 600,
+  "warmup": 32,
+  "steps_per_frame": 1,
+  "period_frames": 64,
+  "scope": "NCA update(s) and optional native uint8 RGB CPU readback; excludes display, audio input, encoding, application overhead and frame pacing. No CPU fallback enabled.",
+  "gpu_resident": {
+    "mean_ms_per_frame": 7.267538673333332,
+    "p50_ms_per_frame": 7.168771,
+    "p95_ms_per_frame": 8.434455599999994,
+    "frames_per_second": 137.5981669928066,
+    "mean_ms_per_update": 7.267538673333332
+  },
+  "rgb_readback": {
+    "mean_ms_per_frame": 7.333241365,
+    "p50_ms_per_frame": 7.3502915,
+    "p95_ms_per_frame": 7.69239965,
+    "frames_per_second": 136.3653465400426,
+    "mean_ms_per_update": 7.333241365
+  },
+  "weights_sha256": "9314990225bbf00875ca65831ae6d5cdb05684ce11ead203d5b857d872b9cebe",
+  "training_step": 11546,
+  "dataset_fingerprint": "c7a5b2383cb1712f72701df554a57abe01a00a4e3a77ab8b93ab56139b1cbd54",
+  "timestamp_utc": "2026-11-04T02:25:35.977167+00:00",
+  "hardware": "Apple M4 Max"
+}

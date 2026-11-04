@@ -1,0 +1,30 @@
+{
+  "sha256": {
+    "MODEL_CARD.md": "06b27ca511dbb5428a8bb5c63565e44fa0ddb77c75a1e09207417f08b1a21c94",
+    "aperture-120bpm.mp4": "97716114f3671c4ba98721d28f599c6ced559cad43f5f15323734ee12bdbbe8c",
+    "beat-recovery.json": "64fd7a2d8498dc6a460ce51d3bfb5547d97160beec63f3c7f81d6e1b174eaf78",
+    "beat-recovery.mp4": "c2e840c3b5902ce957662c8af72f22d2e395c9c53fdec467d1afd021b42947ac",
+    "benchmark.json": "373fb01f02bb1c60e4fd48e7154bfcf54482d9ca559fa1ede12913c13f10f74d",
+    "comparison.mp4": "b97c666f1bff50b2f1b411bba6eec836beb6e06413ed63f6bc05098aee62a151",
+    "config.json": "4f1bb7335f992b4e55b0794b0fb2ecb33d058c88b98d3472908f10a8276794cb",
+    "contact.png": "9ffc21d69f8990aa4736e2cc74b09bf261b16cf88331593ccb667d172919105d",
+    "dataset.json": "244e5782a2b8d83cf8000ca2a5d7289c4be6dbbb09adc1e6b06b774178841e6e",
+    "frame.png": "b257be50e05e01bb2368a9ce195fe997902db8e75db6db81310010cf50e1c7ff",
+    "held-out/metrics.json": "0ed6adf1495024620088fd574eeedf2602183365cc665ff7d1df7be89097c7b8",
+    "index.html": "459a4c66099aeaacd9a1bdf3282637e5a1a25bf340647e586ef839936cc257e0",
+    "metrics-dev.json": "b3cd817492d892994ea7b0873dfb4b9c5e914ad5fe500f7a25014f27a755bdbe",
+    "model.json": "c9eb50167a861ce108e4702cf27cda17ca84b1f781b1d47f734821a315914cf1",
+    "model.pt": "9314990225bbf00875ca65831ae6d5cdb05684ce11ead203d5b857d872b9cebe",
+    "phase-16/metrics.json": "5a238d353d0b38cec15ba0bb4d59c40222d346c368abe436a50404a7e3ece13c",
+    "phase-32/metrics.json": "78e5158b29faf29806119477488a26995fdac602088118bd8ed0ce6c919d3eac",
+    "phase-48/metrics.json": "d3c38e6b7c7fb0b66ae4ba1b87dde0109f9810712daed583b24bc0dc5cc3c5b6",
+    "preview-150bpm.json": "6e82e2a80f7c66e8c7ba868848ae771997952d7193e8a7fece03d553e755ae48",
+    "preview-150bpm.mp4": "c17fed6693664cec1d90c11a6cd52d3572368c4544591c137f926ed785699150",
+    "recurrence.json": "f06b96fcdb0b20c76c1733aebda1753c6c5ca669fa436f547df43e67b0bf99e8",
+    "selection.json": "0e450a3906a4a168135768d34858f4b68db8af4c764e90fbc0a601c073447b6f",
+    "target.mp4": "5773be1032280ae0ff4b70205ee5e555fcd924515707fe8bc514bf3c9952f3e1",
+    "targets.npz": "90a8434c364c0ff43c91cd6c3fba6fc2b638099f8235737d8ef1898c907eb2c2",
+    "training-source.zip": "7d37aa6b5e30ffeedd5bad338a2f629433b13432d0183cacb5a4bb78233c03ce",
+    "training_report.json": "418263c549d4db3050fc3090e5430e855aeb762e41d9f98675adec8991417dc0"
+  }
+}

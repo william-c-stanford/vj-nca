@@ -8,24 +8,33 @@ inspection. It does not yet implement a live VJ application or audio input.
 Read [the research and design notes](docs/RESEARCH.md) for the DyNCA, Reasoning-NCA,
 neural particle automata and frequency-time diffusion investigation.
 
-Current trained artifact: [mixed-v1](artifacts/mixed-v1/MODEL_CARD.md), with 26,452
+Current native-512 artifact: [aperture-fast-v1](artifacts/aperture-fast-v1/MODEL_CARD.md).
+The selected Aperture shader is now a trained **512×512 NCA**, with 144,332 parameters,
+28.02 dB PSNR, motion cosine 0.902 and passing recovery checks over a frozen 32-second
+rollout. Measured inference plus RGB readback reaches **136 fps on an M4 Max**
+(7.7 ms p95; display/audio excluded). The default cycle is two seconds, four times
+faster than the original preview; the [150 BPM gallery](artifacts/aperture-fast-v1/index.html)
+plays it in 1.6 seconds. [Training and speed report](experiments/aperture-fast/REPORT.md).
+This is one shader preset; parameter/code/text conditioning remains future work.
+
+Earlier multi-loop artifact: [mixed-v1](artifacts/mixed-v1/MODEL_CARD.md), with 26,452
 parameters. All seven loops pass the stricter motion/recovery check over a
 32-second held-out rollout; mean PSNR is 28.76 dB. Richer phase conditioning and
 synchronous updates fixed the earlier weak-motion result after widening alone
 failed. See the [three-trial autoresearch report](experiments/autoresearch/REPORT.md).
 This remains a 32×32 training-loop pilot, with one public clip and six procedural loops.
 
-The subsequent [native 512×512 exploration](experiments/rave-512/REPORT.md) implements
-native-pixel patch training and full-canvas evaluation, but has no accepted model.
+The earlier [Electric Sheep 512×512 exploration](experiments/rave-512/REPORT.md) implements
+native-pixel patch training and full-canvas evaluation, but produced no accepted model.
 The detailed Electric Sheep targets were rejected on aesthetic grounds; GPU runs
-are stopped. The next proposed direction is
+are stopped. The broader next direction is
 [shader-generated data with program/text/control conditioning](docs/SHADER_CONDITIONING.md).
 
 Selected visual direction: **kinetic line sculptures**, starting with **Aperture**.
 See the [512×512 shader preview gallery](artifacts/shader-preview-v0/index.html),
 [aesthetic research and learning-difficulty comparison](docs/SHADER_AESTHETICS.md),
-and [deferred directions](docs/FUTURE_WORK.md). These original CC0 shader renders
-are training targets; they are not a new trained NCA artifact.
+and [deferred directions](docs/FUTURE_WORK.md). Those original CC0 shader renders
+are teacher targets; the new Aperture artifact above contains the trained outputs.
 
 Earlier artifacts: [mixed-v0](artifacts/mixed-v0/MODEL_CARD.md),
 [six procedural loops](artifacts/procedural-v0/MODEL_CARD.md), and
@@ -60,6 +69,21 @@ checkpoint. The [preset manifest](datasets/shader-preview-v0.json) declares the
 control ranges; outputs retain source, descriptions, normalized controls and
 hashes for later conditioning experiments. See the
 [preview record](artifacts/shader-preview-v0/README.md) for platform limits and checks.
+
+Prepare a faster Aperture target and run a small GPU training pilot:
+
+```bash
+PYTHONPATH=src python scripts/prepare_aperture.py --seconds 2 --out data/aperture-fast.npz
+PYTHONPATH=src modal run --env main cloud/train_aperture.py \
+  --config configs/aperture-planes.json --out runs/aperture-pilot \
+  --iterations 4000 --seconds 180 --budget-usd 0.35
+```
+
+The cloud runner caps resource use and downloads checkpoints before evaluation.
+Use `--resume runs/aperture-pilot/train/last.pt` with a new output directory to
+continue training, or `--weights .../model.pt` for evaluation only. The released
+[model card](artifacts/aperture-fast-v1/MODEL_CARD.md) includes exact targets,
+evaluation, tempo-controlled rendering and local benchmark commands.
 
 Create six original, smooth, seamless VJ-style test loops. Each has 32 frames at 32×32,
 played at 16 fps. One shared network learns all six with separate conditioning codes.

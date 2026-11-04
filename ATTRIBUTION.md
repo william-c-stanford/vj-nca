@@ -15,6 +15,11 @@ composition and motion principles; none of their media, textures or source code
 is used in these renders or bundled as training data. This original shader branch
 is separate from the noncommercial Electric Sheep experiments below.
 
+The Aperture-only weights in `artifacts/aperture-fast-v1` and
+`experiments/aperture-fast/trials` are MIT licensed. Their original shader target
+dataset and rendered media are CC0-1.0. These runs use no Electric Sheep or public
+plasma data, pretrained weights or reference-artist footage.
+
 The public pilot includes **-PLASMA-ColorCycling.Gif**, by **Ósemkowski**, obtained from
 [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:-PLASMA-ColorCycling.Gif),
 under [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/). Changes: center square

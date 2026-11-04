@@ -1,0 +1,15 @@
+{
+  "weights_sha256": "9314990225bbf00875ca65831ae6d5cdb05684ce11ead203d5b857d872b9cebe",
+  "dataset_fingerprint": "c7a5b2383cb1712f72701df554a57abe01a00a4e3a77ab8b93ab56139b1cbd54",
+  "device": "mps",
+  "resolution": 512,
+  "measured_frames": 128,
+  "carried_state_mse": 0.0015789236640557647,
+  "reset_every_frame_mse": 0.01431908831000328,
+  "reset_every_frame_psnr": 18.44084632484814,
+  "paired_mse": 0.012058798223733902,
+  "reset_to_carried_error_ratio": 9.068892078811453,
+  "reset_motion_cosine": 0.43691906591574964,
+  "reset_motion_gain": 0.30990457457998066,
+  "scope": "Two burn-in and two measured cycles; compare carried state to one update from all-zero state at the same phase. A successful reset-every-frame result would limit claims about learned recurrent dynamics. Same training video, no unseen-loop test."
+}

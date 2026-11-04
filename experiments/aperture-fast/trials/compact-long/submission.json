@@ -1,0 +1,62 @@
+{
+  "source_sha256": "d0a042f92101fca85743bd17995f28c948a6a1c6f85c26f583e163441f129b83",
+  "data_sha256": "90a8434c364c0ff43c91cd6c3fba6fc2b638099f8235737d8ef1898c907eb2c2",
+  "config": {
+    "iterations": 20000,
+    "batch_size": 3,
+    "pool_per_loop": 8,
+    "channels": 11,
+    "hidden": 64,
+    "hidden_layers": 2,
+    "embedding_dim": 12,
+    "phase_harmonics": 16,
+    "spatial_frequencies": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "perception_scales": [
+      1,
+      2
+    ],
+    "fire_rate": 1.0,
+    "hidden_norm": "unit_ball",
+    "norm_groups": 2,
+    "direct_rgb": true,
+    "patch_size": 96,
+    "loss_margin": 24,
+    "patch_edge_probability": 0.15,
+    "steps_per_frame": 1,
+    "unroll_min": 4,
+    "unroll_max": 8,
+    "warmup_max": 4,
+    "fresh_fraction": 0.1,
+    "damage_probability": 0.3,
+    "noise_probability": 0.2,
+    "noise_std": 0.08,
+    "swap_probability": 0,
+    "perturb_warmup": 500,
+    "spectral_weight": 0.02,
+    "temporal_weight": 2.0,
+    "learning_rate": 0.0015,
+    "grad_clip": 1.0,
+    "seed": 42,
+    "device": "cpu",
+    "max_seconds": 600,
+    "log_every": 250,
+    "checkpoint_every": 1000
+  },
+  "train_seconds": 550,
+  "requested_iterations": 18000,
+  "timeout_estimate_usd": 0.314964,
+  "input_weights_sha256": null,
+  "resume_sha256": "7b89a27bba50cc9fa59651616e5023da6f949ca237db2968d37abb76e71c85dc",
+  "evaluation": {
+    "seed": 4041,
+    "cycles": 2,
+    "phase_frame": 0
+  }
+}

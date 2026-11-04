@@ -4,6 +4,11 @@
 See [the aesthetic decision](SHADER_AESTHETICS.md). This list preserves alternatives;
 none is queued for a paid training run.
 
+The [first Aperture preset now has a trained native 512×512 baseline](../artifacts/aperture-fast-v1/MODEL_CARD.md),
+with passing motion/recovery checks and measured 136 fps inference plus RGB readback
+on M4 Max. Structured multi-preset conditioning is the next training question;
+the broader visual directions below remain deferred.
+
 | Direction | Why retain it | Why defer it / return condition |
 |---|---|---|
 | Fold and controlled interference | Original previews already exist in [the gallery](../artifacts/shader-preview-v0/index.html); add bending, squeezing and interactions within the same restrained visual language. | Much higher measured temporal rank than Aperture. Add after parameter-conditioned Aperture learns motion and recovery. |

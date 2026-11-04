@@ -1,0 +1,87 @@
+{
+  "_counter": 4,
+  "root": "n0",
+  "nodes": {
+    "n0": {
+      "id": "n0",
+      "parent": null,
+      "depth": 0,
+      "status": "root",
+      "hypothesis": "Train native-512 Aperture at four times the preview pace with faithful motion and recovery and at least 32 measured local frames per second",
+      "insight": "[from n1] Inference cost can be reduced independently of video fidelity; select rules using native signed-motion measurements, not parameter count or offline playback frame rate.\n[from n2] The first native-512 candidate needs a better representation of oblique contours; extending optimization alone improved images but did not meet signed-motion fidelity.\n[from n3] Learned factorized spatial/time features improve contour fidelity while keeping the local rule small. Measure carried-state dependence because phase conditioning and read-only features alone can otherwise masquerade as recurrent dynamics.\n[from n4] The compact rule with learned factorized priors reaches 28dB native512 reconstruction, faithful signed motion, sustained perturbation recovery and 136fps synchronized RGB readback on M4 Max. Validate with a frozen long rollout and report external-phase, single-preset limits.",
+      "metadata": {
+        "dev_score": null,
+        "test_score": null,
+        "result": "",
+        "branch_ref": null
+      },
+      "created_at": 1793757672,
+      "updated_at": 1793759240
+    },
+    "n1": {
+      "id": "n1",
+      "parent": "n0",
+      "depth": 1,
+      "status": "executed",
+      "hypothesis": "A compact native-512 phase-conditioned rule with direct RGB readout can learn the simple fast Aperture motion while meeting local runtime limits",
+      "insight": "A 12236-parameter coordinate/Fourier rule is fast on MPS but the short pilot has not learned the moving rounded contours. Test more optimization before adding capacity.\n[from n2] The first native-512 candidate needs a better representation of oblique contours; extending optimization alone improved images but did not meet signed-motion fidelity.",
+      "metadata": {
+        "dev_score": 0.0,
+        "test_score": null,
+        "result": "3000 updates: PSNR12.56dB, signed motion cosine0.076, projected gain0.021; native contact sheet shows blurred nearly stationary stripes. Function108.83s, estimated0.0381USD.",
+        "branch_ref": "runs/aperture-preflight"
+      },
+      "created_at": 1793757720,
+      "updated_at": 1793758637
+    },
+    "n2": {
+      "id": "n2",
+      "parent": "n1",
+      "depth": 2,
+      "status": "pruned",
+      "hypothesis": "Increasing compact-rule training from 3000 to 18000 updates will recover signed contour motion without increasing inference cost",
+      "insight": "More optimization improves coarse geometry but still attenuates the moving edges. Use learned spatial/time priors while retaining the measured small update backbone.",
+      "metadata": {
+        "dev_score": 0.0,
+        "test_score": null,
+        "result": "18000 updates improve PSNR12.56 to17.27dB, motion cosine0.510 and gain0.339, but still fail the fixed motion gate; function503.71s and0.1763USD.",
+        "branch_ref": "runs/aperture-long",
+        "prune_reason": "18000 updates remain below the fixed signed-motion cosine and gain gates; pursue a representation change before spending on further coordinate-only optimization."
+      },
+      "created_at": 1793758001,
+      "updated_at": 1793758721
+    },
+    "n3": {
+      "id": "n3",
+      "parent": "n0",
+      "depth": 1,
+      "status": "executed",
+      "hypothesis": "Shared learned XY/XT/YT feature planes let the compact native-512 rule represent moving tilted contours accurately while retaining at least32fps on the M4 Max",
+      "insight": "Small shared learned spatial/time priors resolve enough oblique contour structure to pass at one native-512 update per frame, without widening the backbone.\n[from n4] The compact rule with learned factorized priors reaches 28dB native512 reconstruction, faithful signed motion, sustained perturbation recovery and 136fps synchronized RGB readback on M4 Max. Validate with a frozen long rollout and report external-phase, single-preset limits.",
+      "metadata": {
+        "dev_score": 1.0,
+        "test_score": null,
+        "result": "4000 updates pass native quality and all recovery gates: PSNR22.06dB, signed motion cosine0.723, gain0.610; estimated function0.0483USD. Structural MPS readback benchmark137fps before training; trained timing pending.",
+        "branch_ref": "runs/aperture-planes"
+      },
+      "created_at": 1793758575,
+      "updated_at": 1793759240
+    },
+    "n4": {
+      "id": "n4",
+      "parent": "n3",
+      "depth": 2,
+      "status": "merged",
+      "hypothesis": "Refining the passing feature-plane model to12000 updates will sharpen contour motion and increase its margin above the quality gate at unchanged inference cost",
+      "insight": "Refining the learned-prior model improves both image and signed-motion fidelity without increasing inference cost. Freeze these weights for the long rollout rather than increasing backbone size.",
+      "metadata": {
+        "dev_score": 1.0,
+        "test_score": 1.0,
+        "result": "Refinement stopped at its300s training cap, with PSNR28.01dB, motion cosine0.902 and gain0.838. Native motion/recovery gate passes; unchanged144332-parameter architecture. Estimated function0.1096USD.",
+        "branch_ref": "artifacts/aperture-fast-v1"
+      },
+      "created_at": 1793758769,
+      "updated_at": 1793759240
+    }
+  }
+}

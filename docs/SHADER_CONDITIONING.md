@@ -1,18 +1,22 @@
-# Program-conditioned VJ dynamics — proposed pivot
+# Program-conditioned VJ dynamics — roadmap
 
 2026-11-03. The user rejected the Electric Sheep source aesthetic and suggested
 synthetic shader/TouchDesigner loops, conditioned by source-code and/or description
 embeddings. This changes the dataset direction; it is not evidence that the failed
 native-512 models have been solved. The current Electric Sheep GPU run was stopped.
-No new shader-model training has been launched.
+The later [Aperture training experiment](../experiments/aperture-fast/REPORT.md)
+now passes native 512×512 motion/recovery checks with measured local throughput of 136 fps
+including RGB readback. This is a single-preset learned-ID baseline; semantic and
+numeric-control conditioning remain untrained.
 
 The user subsequently delegated visual selection. The chosen direction is
 **kinetic line sculptures**, starting with **Aperture**, based on
 [the deeper aesthetic investigation and native motion probes](SHADER_AESTHETICS.md).
 [512×512 shader previews](../artifacts/shader-preview-v0/index.html), exact source,
 descriptions and normalized controls are now rendered and recorded. Other visual
-directions are filed in [FUTURE_WORK.md](FUTURE_WORK.md). No semantic encoder or
-shader-conditioned NCA has been trained yet.
+directions are filed in [FUTURE_WORK.md](FUTURE_WORK.md). The original eight-second
+preview is now trained as a two-second cycle, with faster tempo exports available.
+No semantic encoder, parameter sweep or unseen-program result is claimed.
 
 ## What this would let us test
 
@@ -57,6 +61,8 @@ explicit learning target. This is a research hypothesis, not demonstrated behavi
 
 1. Completed: render a small 512×512 style/contact preview, research the aesthetic,
    and select the first family before bulk data generation or paid training.
+   Subsequently completed: train one Aperture preset, check carried-state dependence,
+   pass a frozen 32-second motion/recovery test and benchmark native inference speed.
 2. Generate a modest parameter sweep within Aperture, then expand families. Make all time
    dependence genuinely periodic; check both image and temporal-derivative seams.
    Start with simple geometry, then add distortion/detail as a curriculum.

@@ -1,0 +1,27 @@
+{
+  "device": "mps:0",
+  "platform": "macOS-15.4.1-arm64-arm-64bit",
+  "torch": "2.8.0",
+  "size": 512,
+  "parameters": 144332,
+  "samples": 120,
+  "warmup": 32,
+  "steps_per_frame": 1,
+  "period_frames": 64,
+  "scope": "NCA update(s) and optional native uint8 RGB CPU readback; excludes display, audio input, encoding, application overhead and frame pacing. No CPU fallback enabled.",
+  "gpu_resident": {
+    "mean_ms_per_frame": 7.598690641666667,
+    "p50_ms_per_frame": 7.31225,
+    "p95_ms_per_frame": 9.219979499999999,
+    "frames_per_second": 131.60162022080476,
+    "mean_ms_per_update": 7.598690641666667
+  },
+  "rgb_readback": {
+    "mean_ms_per_frame": 7.2749062333333345,
+    "p50_ms_per_frame": 7.2262705,
+    "p95_ms_per_frame": 7.6505583,
+    "frames_per_second": 137.45881636495042,
+    "mean_ms_per_update": 7.2749062333333345
+  },
+  "note": "Untrained geometry-plane candidate: architecture cost only, not a quality result"
+}

@@ -1,0 +1,16 @@
+{
+  "frozen_at_utc": "2026-11-04T02:25:53.052616+00:00",
+  "node": "n4",
+  "training_step": 11546,
+  "weights_sha256": "9314990225bbf00875ca65831ae6d5cdb05684ce11ead203d5b857d872b9cebe",
+  "selection": "Passing development image, signed-motion and recovery gates; native512 readback136.37fps on M4 Max. No further hyperparameter selection using held-out results.",
+  "held_out": {
+    "device": "mps",
+    "seed": 9091,
+    "cycles": 16,
+    "burn_cycles": 2,
+    "phase_frame": 0
+  },
+  "evaluation_source_sha256": "8ddedc1287fead89758340738daa36f407b514f5da549507742f6ffa4cff1767",
+  "code_commit": "778bf58"
+}

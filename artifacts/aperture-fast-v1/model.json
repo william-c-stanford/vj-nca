@@ -1,0 +1,37 @@
+{
+  "format_version": 1,
+  "model_config": {
+    "num_loops": 1,
+    "channels": 11,
+    "hidden": 64,
+    "embedding_dim": 12,
+    "phase_harmonics": 16,
+    "perception_scales": [
+      1,
+      2
+    ],
+    "fire_rate": 1.0,
+    "hidden_norm": "unit_ball",
+    "norm_groups": 2,
+    "use_phase": true,
+    "spatial_frequencies": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
+    "hidden_layers": 2,
+    "plane_channels": 4,
+    "plane_resolution": 128,
+    "plane_time_resolution": 64,
+    "direct_rgb": true
+  },
+  "loop_names": [
+    "aperture"
+  ],
+  "training_step": 11546,
+  "steps_per_frame": 1,
+  "dataset_fingerprint": "c7a5b2383cb1712f72701df554a57abe01a00a4e3a77ab8b93ab56139b1cbd54"
+}

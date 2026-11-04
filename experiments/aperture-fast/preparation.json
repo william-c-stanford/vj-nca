@@ -1,0 +1,1 @@
+{"shape": [1, 64, 3, 512, 512], "fps": 32.0, "seconds": 2, "fingerprint": "c7a5b2383cb1712f72701df554a57abe01a00a4e3a77ab8b93ab56139b1cbd54", "bytes": 34882252, "diagnostics": {"aperture": {"seam_mse": 0.017196306958794594, "adjacent_mse": 0.010520154610276222, "seam_ratio": 1.6346043348312378}}}

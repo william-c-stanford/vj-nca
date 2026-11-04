@@ -1,0 +1,15 @@
+{
+  "objective": "Train native-512 Aperture at four times the preview pace with faithful motion and recovery and at least 32 measured local frames per second",
+  "metric_direction": "max",
+  "dev_eval": "seed4041 native512 two measured cycles fixed image/motion/recovery gates plus synchronized local inference benchmark",
+  "test_eval": "Frozen weights seed9091 sixteen measured cycles and independent timing samples",
+  "material": "8be546d",
+  "branching": 3,
+  "max_depth": 3,
+  "budget_cycles": 6,
+  "cycles_used": 4,
+  "best_node": "n4",
+  "best_test_score": 1.0,
+  "best_branch_ref": "artifacts/aperture-fast-v1",
+  "created_at": 1793757672
+}
