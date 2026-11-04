@@ -1,0 +1,11 @@
+{
+  "completed_iterations": 15000,
+  "requested_iterations": 15000,
+  "stop_reason": "iterations",
+  "training_seconds": 497.768485348,
+  "parameters": 196656,
+  "device": "cuda",
+  "torch": "2.8.0+cu128",
+  "gpu": "NVIDIA A10G",
+  "peak_cuda_bytes": 1660944384
+}

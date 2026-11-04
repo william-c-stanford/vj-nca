@@ -1,0 +1,56 @@
+{
+  "note": "Linear area-downsample/bilinear-upsample control on native signed velocities; diagnostic, not a nonlinear neural-field expressivity bound.",
+  "per_loop": {
+    "electricsheep.248.27561": {
+      "64": {
+        "motion_gain": 0.3800346496896411,
+        "motion_cosine": 0.7088023410857179,
+        "relative_error": 0.5274030669647142
+      },
+      "128": {
+        "motion_gain": 0.6329229339982266,
+        "motion_cosine": 0.872557251993956,
+        "relative_error": 0.260309316860724
+      },
+      "256": {
+        "motion_gain": 0.8385818004175528,
+        "motion_cosine": 0.9631378634398365,
+        "relative_error": 0.08091455990998807
+      }
+    },
+    "electricsheep.248.27681": {
+      "64": {
+        "motion_gain": 0.3714672521200325,
+        "motion_cosine": 0.7254706676458562,
+        "relative_error": 0.5192465289287088
+      },
+      "128": {
+        "motion_gain": 0.6587202194465499,
+        "motion_cosine": 0.8993880134068015,
+        "relative_error": 0.2189832588830968
+      },
+      "256": {
+        "motion_gain": 0.8594337990362484,
+        "motion_cosine": 0.973260074310178,
+        "relative_error": 0.06090333182163477
+      }
+    },
+    "electricsheep.248.27741": {
+      "64": {
+        "motion_gain": 0.29660783049611356,
+        "motion_cosine": 0.6082589334149169,
+        "relative_error": 0.6445714686015951
+      },
+      "128": {
+        "motion_gain": 0.509993598793359,
+        "motion_cosine": 0.7903776723998918,
+        "relative_error": 0.3963642519543053
+      },
+      "256": {
+        "motion_gain": 0.7512346906654288,
+        "motion_cosine": 0.9342065352022002,
+        "relative_error": 0.14417480591003604
+      }
+    }
+  }
+}

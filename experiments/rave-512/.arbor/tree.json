@@ -1,0 +1,102 @@
+{
+  "_counter": 5,
+  "root": "n0",
+  "nodes": {
+    "n0": {
+      "id": "n0",
+      "parent": null,
+      "depth": 0,
+      "status": "root",
+      "hypothesis": "Train one shared NCA on three real psychedelic loops at native 512x512 with visible motion and perturbation recovery, using staged pilots within 5 USD",
+      "insight": "[from n1] Native 512 targets need not imply full-canvas BPTT: spatially aligned patch states preserve native pixels and fit in under 2GiB, while a streaming full-canvas evaluator verifies actual 512 output.\n[from n2] Native resolution is computationally feasible, but raster-video temporal representation is now the bottleneck. Reject sharp static approximations even when PSNR improves.\n[from n4] Four-cycle diagnostic separates two failures: weak motion already in cycle1, and accumulating RGB bias worsens appearance with age. Training horizon alone will not restore motion. Test direct visible readout before adding capacity.\n[from n5] Aesthetic acceptance is part of the objective. Stop optimizing rejected source footage; use a small shader-family preview to establish the next dataset before bulk rendering or paid training.",
+      "metadata": {
+        "dev_score": null,
+        "test_score": null,
+        "result": "",
+        "branch_ref": null
+      },
+      "created_at": 1793751699,
+      "updated_at": 1793754890
+    },
+    "n1": {
+      "id": "n1",
+      "parent": "n0",
+      "depth": 1,
+      "status": "executed",
+      "hypothesis": "Coordinate-preserving native-pixel patch BPTT, Fourier position features and a wider two-layer update rule make shared 512x512 training feasible on three real Electric Sheep loops",
+      "insight": "Native-pixel patch BPTT and full-canvas evaluation fit easily on one affordable GPU. A 250-step test validates mechanics, not quality. Ensure patch supervision covers true image edges before longer training.\n[from n2] Native resolution is computationally feasible, but raster-video temporal representation is now the bottleneck. Reject sharp static approximations even when PSNR improves.",
+      "metadata": {
+        "dev_score": 0.0,
+        "test_score": null,
+        "result": "250-step native-512 preflight completed; 85872 parameters, A10G, 8.44s training, 1.55GiB peak allocated during training. Full-canvas streaming eval and exports completed in 105s total, estimated cost 0.03677USD. No useful motion yet.",
+        "branch_ref": "configs/rave-512.json; runs/rave-512-preflight/source"
+      },
+      "created_at": 1793751699,
+      "updated_at": 1793752542
+    },
+    "n2": {
+      "id": "n2",
+      "parent": "n1",
+      "depth": 2,
+      "status": "executed",
+      "hypothesis": "A 256-wide three-hidden-layer shared rule trained for up to 15000 native-pixel patch updates will reconstruct motion in the three complex psychedelic loops without exceeding the pilot budget",
+      "insight": "Deeper coordinate/Fourier-conditioned rules fit static appearance but collapse temporal motion on complex art footage. More training or width alone is a poor next step; add a representation that directly couples local position to periodic time.",
+      "metadata": {
+        "dev_score": 0.0,
+        "test_score": null,
+        "result": "15000 native-patch updates, 497.7s A10G training. Mean PSNR20.19dB; motion cosines0.020,0.008,0.106 and gains0.0028,0.0005,0.0141. All three fail motion; full-canvas outputs resemble static temporal means.",
+        "branch_ref": "configs/rave-512-deep.json; runs/rave-512-deep/source"
+      },
+      "created_at": 1793751829,
+      "updated_at": 1793752542
+    },
+    "n3": {
+      "id": "n3",
+      "parent": "n0",
+      "depth": 1,
+      "status": "executed",
+      "hypothesis": "Shared learned XY, X-time and Y-time feature planes with cyclic temporal interpolation will prevent temporal-mean collapse while retaining a shared local NCA rule and global loop codes",
+      "insight": "Periodic feature-plane sampling is valid, differentiable and fits on A10G at native resolution. Need sufficient optimization and stronger signed motion supervision; short-run appearance improvements alone do not establish animation quality.\n[from n4] Four-cycle diagnostic separates two failures: weak motion already in cycle1, and accumulating RGB bias worsens appearance with age. Training horizon alone will not restore motion. Test direct visible readout before adding capacity.\n[from n5] Aesthetic acceptance is part of the objective. Stop optimizing rejected source footage; use a small shader-family preview to establish the next dataset before bulk rendering or paid training.",
+      "metadata": {
+        "dev_score": 0.0,
+        "test_score": null,
+        "result": "1000-step feature-plane preflight completed in 43.3s training; full native-512 export and evaluation complete. 4.02GB maximum CUDA allocation across function, estimated cost0.06673USD. Motion remains near zero at this early stage.",
+        "branch_ref": "configs/rave-512-planes.json; runs/rave-512-planes-preflight/source"
+      },
+      "created_at": 1793752542,
+      "updated_at": 1793754890
+    },
+    "n4": {
+      "id": "n4",
+      "parent": "n3",
+      "depth": 2,
+      "status": "executed",
+      "hypothesis": "Training the shared periodic feature-plane NCA for 20000 updates with temporal loss weight5 and a 3x feature-grid learning rate will recover motion in the three native-512 clips",
+      "insight": "Shared space-time planes and stronger motion supervision improve nonzero motion but do not solve rollout fidelity. Separate representation limits from recurrent age and patch distribution shift before further scaling.",
+      "metadata": {
+        "dev_score": 0.0,
+        "test_score": null,
+        "result": "20000 updates, 759.9s A10G training, 737328 parameters. Native full-canvas motion cosines0.191/0.251/0.295, gains0.048/0.050/0.090, meanPSNR18.53dB. All fail; source purple/gray renders shift toward green at long horizon.",
+        "branch_ref": "configs/rave-512-motion.json; experiments/rave-512/trials/motion"
+      },
+      "created_at": 1793752950,
+      "updated_at": 1793754243
+    },
+    "n5": {
+      "id": "n5",
+      "parent": "n3",
+      "depth": 2,
+      "status": "pruned",
+      "hypothesis": "Predicting visible RGB directly while retaining residual hidden-state dynamics removes long-horizon color integration bias and improves native motion at unchanged model size",
+      "insight": "The rejected source aesthetic invalidates further optimization toward this dataset as a product objective. Preserve the resolution pipeline, but choose shader-generated target styles with the user before spending on another model.",
+      "metadata": {
+        "dev_score": null,
+        "test_score": null,
+        "result": "Run interrupted at user dataset pivot; last observed 8250 updates, no evaluation or returned weights. No quality score assigned. All GPU apps verified stopped.",
+        "branch_ref": "configs/rave-512-readout.json; runs/rave-512-readout/source"
+      },
+      "created_at": 1793754308,
+      "updated_at": 1793754847
+    }
+  }
+}

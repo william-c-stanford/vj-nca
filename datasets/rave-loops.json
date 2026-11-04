@@ -1,0 +1,19 @@
+{
+  "name": "electric-sheep-rave-pilot",
+  "author": "Scott Draves and the Electric Sheep",
+  "source_page": "https://archive.org/details/electricsheep-flock-248-27500-1",
+  "download_root": "https://archive.org/download/electricsheep-flock-248-27500-1/",
+  "license": "CC-BY-NC-3.0-US",
+  "license_url": "https://creativecommons.org/licenses/by-nc/3.0/us/",
+  "artist_license_policy": "https://electricsheep.org/license/",
+  "checked": "2026-11-03",
+  "source_dimensions": [800, 592],
+  "duration_seconds": 5.333333333333333,
+  "frames": 64,
+  "fps": 12,
+  "clips": [
+    {"name": "electricsheep.248.27561", "description": "gold psychedelic lattice", "file": "00248=27561=27561=27561.avi", "sha256": "d75920cb12839565bafdeedb8273d059eb108f4fb3bf893f2935434c32e3cb12"},
+    {"name": "electricsheep.248.27681", "description": "purple orbital ribbons", "file": "00248=27681=27681=27681.avi", "sha256": "f55ea9796026c52d0028a1a8dbb8f236d8e80dcc6d87477a9d44e16ad35c2338"},
+    {"name": "electricsheep.248.27741", "description": "luminous fractal tendrils", "file": "00248=27741=27741=27741.avi", "sha256": "35c87c262ba908b9a08395d6770582c8873ec3ee17b03b1fa13ceb7646ea2996"}
+  ]
+}

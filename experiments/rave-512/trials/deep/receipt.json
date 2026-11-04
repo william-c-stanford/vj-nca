@@ -1,0 +1,16 @@
+{
+  "status": "complete",
+  "gpu": "NVIDIA A10G",
+  "source_sha256": "df9df629c1c9b85824136871a7c88b9f69736652352676b1ffe49dc1daa6d30a",
+  "dataset_fingerprint": "f16d63cc361446f96b5a5d8bbf6765b811027db2e716bee95908f4cfa9ca77aa",
+  "resolution": 512,
+  "function_seconds": 621.238592336,
+  "estimated_function_usd": 0.21740865777390658,
+  "tf32": true,
+  "price_checked": "2026-11-03",
+  "summary": {
+    "mean_mse": 0.009714513071343418,
+    "mean_psnr": 20.190195679387752,
+    "passing_loops": 0
+  }
+}

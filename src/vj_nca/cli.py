@@ -9,6 +9,7 @@ from .data import LoopDataset, import_video, make_procedural, merge_datasets
 from .evaluate import evaluate
 from .export import export_weights
 from .media import comparison_grid, save_video
+from .stream_eval import evaluate_streaming
 from .train import TrainConfig, train
 
 
@@ -61,6 +62,9 @@ def main():
     testing.add_argument("--cycles", type=int, default=4)
     testing.add_argument("--phase-frame", type=int, default=0)
     testing.add_argument("--no-export", action="store_true")
+    testing.add_argument(
+        "--streaming", action="store_true", help="Bounded-memory native-pixel evaluation"
+    )
     exporting = sub.add_parser("export", help="Save small tensor-only weights for sharing")
     exporting.add_argument("--checkpoint", type=Path, required=True)
     exporting.add_argument("--out", type=Path, required=True)
@@ -93,7 +97,8 @@ def main():
         print(export_weights(args.checkpoint, args.out))
         return
     else:
-        metrics = evaluate(
+        evaluator = evaluate_streaming if args.streaming else evaluate
+        metrics = evaluator(
             args.checkpoint,
             LoopDataset.load(args.data),
             args.out,

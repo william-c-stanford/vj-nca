@@ -1,0 +1,17 @@
+{
+  "sampling": "every eighth native pixel, no spatial averaging",
+  "loops": {
+    "electricsheep.248.27561": {
+      "temporal_energy_first_8": 0.5154220461845398,
+      "temporal_energy_first_16": 0.7297631502151489
+    },
+    "electricsheep.248.27681": {
+      "temporal_energy_first_8": 0.3511245846748352,
+      "temporal_energy_first_16": 0.5822219848632812
+    },
+    "electricsheep.248.27741": {
+      "temporal_energy_first_8": 0.583680272102356,
+      "temporal_energy_first_16": 0.7653319239616394
+    }
+  }
+}

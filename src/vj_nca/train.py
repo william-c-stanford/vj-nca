@@ -1,4 +1,5 @@
 import json
+import math
 import random
 import time
 from dataclasses import asdict, dataclass
@@ -27,6 +28,14 @@ class TrainConfig:
     hidden_norm: str = "none"
     norm_groups: int = 4
     use_phase: bool = True
+    spatial_frequencies: tuple[float, ...] = ()
+    hidden_layers: int = 1
+    plane_channels: int = 0
+    plane_resolution: int = 128
+    plane_time_resolution: int = 64
+    direct_rgb: bool = False
+    patch_size: int = 0
+    loss_margin: int = 0
     steps_per_frame: int = 2
     unroll_min: int = 8
     unroll_max: int = 16
@@ -38,6 +47,8 @@ class TrainConfig:
     swap_probability: float = 0.15
     perturb_warmup: int = 200
     spectral_weight: float = 0.02
+    temporal_weight: float = 0.5
+    plane_lr_multiplier: float = 1.0
     learning_rate: float = 0.002
     grad_clip: float = 1.0
     seed: int = 42
@@ -48,6 +59,15 @@ class TrainConfig:
 
     def __post_init__(self):
         self.perception_scales = tuple(self.perception_scales)
+        self.spatial_frequencies = tuple(self.spatial_frequencies)
+        if self.patch_size < 0 or self.loss_margin < 0:
+            raise ValueError("patch_size and loss_margin must be nonnegative")
+        if self.patch_size and 2 * self.loss_margin >= self.patch_size:
+            raise ValueError("The supervised patch interior must be nonempty")
+        if self.loss_margin and not self.patch_size:
+            raise ValueError("loss_margin is only used with patch training")
+        if self.temporal_weight < 0 or self.plane_lr_multiplier <= 0:
+            raise ValueError("Use nonnegative temporal weight and positive plane LR multiplier")
         if not 2 <= self.unroll_min <= self.unroll_max or self.warmup_max < 0:
             raise ValueError("Need 2 <= unroll_min <= unroll_max and nonnegative warmup")
         if (
@@ -85,6 +105,7 @@ class ReplayPool:
         self.states = torch.zeros(num_loops * per_loop, channels, size, size, device=device)
         self.ticks = torch.zeros(num_loops * per_loop, dtype=torch.long, device=device)
         self.ages = torch.zeros_like(self.ticks)
+        self.origins = torch.zeros(len(self.states), 2, dtype=torch.long, device=device)
 
     def loop_ids(self, slots: Tensor) -> Tensor:
         return slots // self.per_loop
@@ -95,11 +116,36 @@ class ReplayPool:
         self.ages[slots] = ages.detach()
 
     def state_dict(self) -> dict:
-        return {key: getattr(self, key).cpu() for key in ("states", "ticks", "ages")}
+        return {key: getattr(self, key).cpu() for key in ("states", "ticks", "ages", "origins")}
 
     def load_state_dict(self, saved: dict):
         for key in ("states", "ticks", "ages"):
             getattr(self, key).copy_(saved[key])
+        if "origins" in saved:
+            self.origins.copy_(saved["origins"])
+
+
+def crop_targets(frames: Tensor, origins: Tensor, size: int) -> Tensor:
+    """Gather per-sample native-resolution windows without resizing their pixels."""
+    offsets = torch.arange(size, device=frames.device)
+    y = origins[:, 0, None, None] + offsets[None, :, None]
+    x = origins[:, 1, None, None] + offsets[None, None, :]
+    indices = (y * frames.shape[-1] + x).flatten(1)
+    return (
+        frames.flatten(2)
+        .gather(2, indices[:, None].expand(-1, frames.shape[1], -1))
+        .reshape(len(frames), frames.shape[1], size, size)
+    )
+
+
+def supervised_window(
+    origin: list[int], size: int, canvas_size: int, margin: int
+) -> tuple[slice, slice]:
+    """Exclude artificial crop boundaries; keep genuine canvas edges supervised."""
+    return tuple(
+        slice(0 if start == 0 else margin, size if start + size == canvas_size else size - margin)
+        for start in origin
+    )
 
 
 def damage_state(state: Tensor, probability: float) -> Tensor:
@@ -172,6 +218,12 @@ def train(
         raise ValueError("Canvas too small for the chosen perception scales")
     if config.batch_size > len(dataset.names) * config.pool_per_loop:
         raise ValueError("batch_size cannot exceed the replay pool capacity")
+    state_size = config.patch_size or dataset.size
+    alignment = math.lcm(*config.perception_scales)
+    if state_size > dataset.size or state_size % alignment or dataset.size % alignment:
+        raise ValueError("Patch must fit inside the canvas and align to all perception scales")
+    if 2 * config.loss_margin >= state_size:
+        raise ValueError("loss_margin leaves no supervised pixels")
     output.mkdir(parents=True, exist_ok=True)
     if (output / "last.pt").exists() and resume is None:
         raise FileExistsError("Run already exists; use --resume or a new output directory")
@@ -182,21 +234,41 @@ def train(
     model_fields = ModelConfig.__dataclass_fields__
     kwargs = {k: v for k, v in asdict(config).items() if k in model_fields}
     model = ConditionedNCA(ModelConfig(num_loops=len(dataset.names), **kwargs)).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
-    pool = ReplayPool(
-        len(dataset.names), config.pool_per_loop, config.channels, dataset.size, device
-    )
+    if config.plane_channels and config.plane_lr_multiplier != 1:
+        backbone = [p for name, p in model.named_parameters() if not name.startswith("planes.")]
+        optimizer = torch.optim.Adam(
+            [
+                {"params": backbone},
+                {
+                    "params": model.planes.parameters(),
+                    "lr": config.learning_rate * config.plane_lr_multiplier,
+                },
+            ],
+            lr=config.learning_rate,
+        )
+    else:
+        optimizer = torch.optim.Adam(model.parameters(), lr=config.learning_rate)
+    pool = ReplayPool(len(dataset.names), config.pool_per_loop, config.channels, state_size, device)
     period_ticks = dataset.period * config.steps_per_frame
     pool.ticks.random_(0, period_ticks)
+
+    def sample_origins(count: int) -> Tensor:
+        maximum = (dataset.size - state_size) // alignment
+        position = torch.randint(maximum + 1, (count, 2), device=device)
+        edge = torch.randint(4, (count, 2), device=device)
+        position = torch.where(edge == 0, 0, torch.where(edge == 1, maximum, position))
+        return position * alignment
+
+    if config.patch_size:
+        pool.origins.copy_(sample_origins(len(pool.states)))
     first_step, last_loss = 0, float("inf")
     if resume is not None:
         saved = torch.load(resume, map_location="cpu", weights_only=False)
         if saved["dataset_fingerprint"] != fingerprint:
             raise ValueError("Checkpoint dataset differs (including loop ID ordering)")
         mutable = {"iterations", "device", "max_seconds", "log_every", "checkpoint_every"}
-        if any(
-            v != saved["train_config"][k] for k, v in asdict(config).items() if k not in mutable
-        ):
+        previous_config = asdict(TrainConfig(**saved["train_config"]))
+        if any(v != previous_config[k] for k, v in asdict(config).items() if k not in mutable):
             raise ValueError("Resume cannot change model, optimizer or training settings")
         model.load_state_dict(saved["model"])
         optimizer.load_state_dict(saved["optimizer"])
@@ -238,6 +310,9 @@ def train(
             state[fresh] = 0
             ages[fresh] = 0
             ticks[fresh] = torch.randint(period_ticks, (int(fresh.sum()),), device=device)
+            if config.patch_size:
+                pool.origins[slots[fresh]] = sample_origins(int(fresh.sum()))
+            origins = pool.origins[slots] if config.patch_size else None
             ramp = min(1.0, (step + 1) / max(1, config.perturb_warmup))
             if len(dataset.names) > 1 and config.swap_probability:
                 switched = torch.rand(len(slots), device=device) < config.swap_probability * ramp
@@ -256,22 +331,57 @@ def train(
             with torch.no_grad():
                 for _ in range(prefix):
                     ticks = (ticks + 1) % period_ticks
-                    state = model(state, ids, ticks.float() / period_ticks)
+                    state = model(
+                        state,
+                        ids,
+                        ticks.float() / period_ticks,
+                        origins=origins,
+                        canvas_size=dataset.size,
+                    )
             unroll = random.randint(config.unroll_min, config.unroll_max)
             predictions, targets = [], []
             optimizer.zero_grad(set_to_none=True)
             for _ in range(unroll):
                 ticks = (ticks + 1) % period_ticks
-                state = model(state, ids, ticks.float() / period_ticks)
+                state = model(
+                    state,
+                    ids,
+                    ticks.float() / period_ticks,
+                    origins=origins,
+                    canvas_size=dataset.size,
+                )
                 if config.noise_probability:
                     state = noise_state(
                         state, config.noise_probability * ramp * 0.15, config.noise_std
                     )
                 predictions.append(model.rgb(state))
-                targets.append(dataset.target(ids, ticks, config.steps_per_frame))
-            loss, parts = video_loss(
-                torch.stack(predictions, 1), torch.stack(targets, 1), state, config.spectral_weight
-            )
+                target = dataset.target(ids, ticks, config.steps_per_frame)
+                targets.append(
+                    crop_targets(target, origins, state_size) if origins is not None else target
+                )
+            prediction, target = torch.stack(predictions, 1), torch.stack(targets, 1)
+            if config.loss_margin:
+                samples = []
+                for i, origin in enumerate(origins.cpu().tolist()):
+                    y, x = supervised_window(origin, state_size, dataset.size, config.loss_margin)
+                    samples.append(
+                        video_loss(
+                            prediction[i : i + 1, ..., y, x],
+                            target[i : i + 1, ..., y, x],
+                            state[i : i + 1],
+                            config.spectral_weight,
+                            config.temporal_weight,
+                        )
+                    )
+                loss = sum(value[0] for value in samples) / len(samples)
+                parts = {
+                    key: sum(value[1][key] for value in samples) / len(samples)
+                    for key in samples[0][1]
+                }
+            else:
+                loss, parts = video_loss(
+                    prediction, target, state, config.spectral_weight, config.temporal_weight
+                )
             if not torch.isfinite(loss):
                 raise FloatingPointError(f"Non-finite loss at iteration {step + 1}")
             loss.backward()

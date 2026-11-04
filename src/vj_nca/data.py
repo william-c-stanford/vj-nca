@@ -143,6 +143,7 @@ def import_video(
     duration: float,
     source_url: str,
     license_name: str,
+    normalize_timestamps: bool = False,
 ) -> LoopDataset:
     """Decode one explicitly selected complete cycle and retime to a common period.
 
@@ -155,12 +156,13 @@ def import_video(
         f"scale={size}:{size}:force_original_aspect_ratio=increase,"
         f"crop={size}:{size},fps={frames / duration}"
     )
+    if normalize_timestamps:
+        vf = "setpts=PTS-STARTPTS," + vf + ":round=up:start_time=0"
     command = [
         "ffmpeg",
         "-v",
         "error",
-        "-ss",
-        str(start),
+        *(["-ss", str(start)] if start or not normalize_timestamps else []),
         "-i",
         str(path),
         "-t",
@@ -191,6 +193,8 @@ def import_video(
         "crop": "center-square",
         "audio": "discarded",
     }
+    if normalize_timestamps:
+        source["timestamp_normalization"] = "zero-origin, fps round-up; no zero-time AVI seek"
     video = torch.from_numpy(arr).permute(0, 3, 1, 2).float() / 127.5 - 1
     return LoopDataset(video[None], [name], fps, [source])
 

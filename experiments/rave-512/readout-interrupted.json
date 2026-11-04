@@ -1,0 +1,10 @@
+{
+  "status": "cancelled-on-dataset-pivot",
+  "app_id": "ap-4ZGiafhHdqMUMmroY5xCOt",
+  "reason": "User rejected the source aesthetic and proposed shader-generated data with program/description conditioning.",
+  "last_observed_training_step": 8250,
+  "last_observed_training_seconds": 324.753363933,
+  "dev_score": null,
+  "weights_downloaded": false,
+  "note": "Interrupted before training/evaluation bundles returned. No quality conclusion or final cost receipt exists for this trial. Exact submitted source and settings remain in the local run directory."
+}

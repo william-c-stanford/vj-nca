@@ -10,3 +10,4 @@ runs/
 *.npz
 !artifacts/*/model.pt
 !experiments/autoresearch/trials/*/model.pt
+!experiments/rave-512/trials/*/model.pt

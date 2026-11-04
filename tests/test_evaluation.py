@@ -8,9 +8,47 @@ import torch
 from vj_nca.data import make_procedural
 from vj_nca.evaluate import evaluate, motion_statistics, recovery_frame
 from vj_nca.model import ConditionedNCA, ModelConfig
+from vj_nca.stream_eval import evaluate_streaming
 
 
 class EvaluationTests(unittest.TestCase):
+    def test_streaming_scores_match_full_video_evaluator(self):
+        torch.set_num_threads(1)
+        torch.manual_seed(8)
+        ds = make_procedural(size=8, frames=8, count=2)
+        model = ConditionedNCA(ModelConfig(num_loops=2, channels=7, hidden=8, fire_rate=1))
+        with torch.no_grad():
+            model.update_out.weight.normal_(0, 0.02)
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            path = root / "model.pt"
+            torch.save(
+                {
+                    "model_config": asdict(model.config),
+                    "model": model.state_dict(),
+                    "dataset_fingerprint": ds.fingerprint(),
+                    "training_step": 0,
+                    "steps_per_frame": 2,
+                },
+                path,
+            )
+            old = evaluate(path, ds, root / "full", burn_cycles=1, cycles=2, export=False)
+            new = evaluate_streaming(
+                path, ds, root / "stream", device="cpu", burn_cycles=1, cycles=2, export=False
+            )
+            for name in ds.names:
+                for key in (
+                    "mse",
+                    "psnr",
+                    "motion_cosine",
+                    "motion_gain",
+                    "relative_temporal_error",
+                    "cycle_drift_mse",
+                ):
+                    self.assertAlmostEqual(
+                        old["per_loop"][name][key], new["per_loop"][name][key], places=5
+                    )
+
     def test_released_weights_reproduce_full_checkpoint_evaluation(self):
         torch.set_num_threads(1)
         torch.manual_seed(7)

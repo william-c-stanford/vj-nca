@@ -1,0 +1,15 @@
+{
+  "objective": "Train one shared NCA on three real psychedelic loops at native 512x512 with visible motion and perturbation recovery, using staged pilots within 5 USD",
+  "metric_direction": "max",
+  "dev_eval": "Native-pixel streaming evaluator seed4041, two cycles; fixed motion cosine >=0.7 gain0.5..1.5 and MSE < half static mean, all perturbations recover in1s; inspect native previews",
+  "test_eval": "Frozen selected weights, seed9091, four cycles; no unseen-video claim",
+  "material": "9ba269f",
+  "branching": 4,
+  "max_depth": 3,
+  "budget_cycles": 8,
+  "cycles_used": 3,
+  "best_node": null,
+  "best_test_score": null,
+  "best_branch_ref": null,
+  "created_at": 1793751699
+}

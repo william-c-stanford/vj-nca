@@ -1,0 +1,39 @@
+{
+  "format_version": 1,
+  "model_config": {
+    "num_loops": 3,
+    "channels": 35,
+    "hidden": 256,
+    "embedding_dim": 16,
+    "phase_harmonics": 16,
+    "perception_scales": [
+      1,
+      2
+    ],
+    "fire_rate": 1.0,
+    "hidden_norm": "unit_ball",
+    "norm_groups": 4,
+    "use_phase": true,
+    "spatial_frequencies": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "hidden_layers": 3,
+    "plane_channels": 16,
+    "plane_resolution": 128,
+    "plane_time_resolution": 64
+  },
+  "loop_names": [
+    "electricsheep.248.27561",
+    "electricsheep.248.27681",
+    "electricsheep.248.27741"
+  ],
+  "training_step": 1000,
+  "steps_per_frame": 2,
+  "dataset_fingerprint": "f16d63cc361446f96b5a5d8bbf6765b811027db2e716bee95908f4cfa9ca77aa"
+}

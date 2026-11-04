@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 from vj_nca.data import LoopDataset, make_procedural
-from vj_nca.losses import temporal_loss
+from vj_nca.losses import temporal_loss, video_loss
 from vj_nca.model import ConditionedNCA, ModelConfig
 from vj_nca.train import ReplayPool, TrainConfig, train
 
@@ -83,6 +83,23 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(temporal_loss(target, target).item(), 0)
         self.assertGreater(temporal_loss(target * 0, target).item(), 0)
         self.assertGreater(temporal_loss(target.flip(1), target).item(), 1)
+
+    def test_motion_weight_can_prefer_biased_motion_to_a_frozen_mean(self):
+        target = (
+            (torch.tensor([0.0, 1.0, 0.0, -1.0]) * 0.2).reshape(1, 4, 1, 1, 1).expand(1, 4, 3, 4, 4)
+        )
+        frozen, moving = target * 0, target + 0.3
+        state = torch.zeros(1, 7, 4, 4)
+        low = [
+            video_loss(p, target, state, spectral_weight=0, temporal_weight=0.5)[0]
+            for p in (frozen, moving)
+        ]
+        high = [
+            video_loss(p, target, state, spectral_weight=0, temporal_weight=5)[0]
+            for p in (frozen, moving)
+        ]
+        self.assertLess(low[0].item(), low[1].item())
+        self.assertGreater(high[0].item(), high[1].item())
 
     def test_procedural_loops_are_distinct_and_closed(self):
         ds = make_procedural(size=16, frames=16, count=4)

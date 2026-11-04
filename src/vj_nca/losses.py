@@ -9,7 +9,11 @@ def temporal_loss(prediction: Tensor, target: Tensor) -> Tensor:
 
 
 def video_loss(
-    prediction: Tensor, target: Tensor, state: Tensor, spectral_weight: float = 0.02
+    prediction: Tensor,
+    target: Tensor,
+    state: Tensor,
+    spectral_weight: float = 0.02,
+    temporal_weight: float = 0.5,
 ) -> tuple[Tensor, dict[str, Tensor]]:
     pred, truth = prediction.flatten(0, 1), target.flatten(0, 1)
     pixel = F.mse_loss(pred, truth)
@@ -25,6 +29,6 @@ def video_loss(
         b = torch.fft.rfft2(truth, norm="ortho").abs()
         spectral = F.l1_loss(torch.log1p(a), torch.log1p(b))
     overflow = (state.abs() - 2).relu().square().mean()
-    total = pixel + 0.5 * coarse + 0.1 * spatial + 0.5 * temporal
+    total = pixel + 0.5 * coarse + 0.1 * spatial + temporal_weight * temporal
     total = total + spectral_weight * spectral + 1e-3 * overflow
     return total, {"pixel": pixel, "temporal": temporal, "spectral": spectral, "overflow": overflow}

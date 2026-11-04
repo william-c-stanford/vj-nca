@@ -1,0 +1,63 @@
+{
+  "source_sha256": "83901fc70f75697c4a447627011ac7056dd24ce7bca69974be5ab4a329279734",
+  "config": {
+    "iterations": 20000,
+    "batch_size": 2,
+    "pool_per_loop": 6,
+    "channels": 35,
+    "hidden": 256,
+    "hidden_layers": 3,
+    "embedding_dim": 16,
+    "phase_harmonics": 16,
+    "spatial_frequencies": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "perception_scales": [
+      1,
+      2
+    ],
+    "fire_rate": 1.0,
+    "hidden_norm": "unit_ball",
+    "norm_groups": 4,
+    "use_phase": true,
+    "patch_size": 96,
+    "loss_margin": 24,
+    "steps_per_frame": 2,
+    "unroll_min": 4,
+    "unroll_max": 8,
+    "warmup_max": 0,
+    "fresh_fraction": 0.2,
+    "damage_probability": 0.3,
+    "noise_probability": 0.3,
+    "noise_std": 0.08,
+    "swap_probability": 0.15,
+    "perturb_warmup": 500,
+    "spectral_weight": 0.02,
+    "learning_rate": 0.001,
+    "grad_clip": 1.0,
+    "seed": 42,
+    "device": "cpu",
+    "max_seconds": 1500,
+    "log_every": 250,
+    "checkpoint_every": 500,
+    "plane_channels": 16,
+    "plane_resolution": 128,
+    "plane_time_resolution": 64
+  },
+  "train_seconds": 120,
+  "requested_iterations": 1000,
+  "timeout_estimate_usd": 0.734916,
+  "source_bytes": 5800294,
+  "input_weights_sha256": null,
+  "evaluation": {
+    "seed": 4041,
+    "cycles": 2,
+    "phase_frame": 0
+  }
+}

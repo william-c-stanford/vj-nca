@@ -1,0 +1,8 @@
+{
+  "machine": "arm64",
+  "cpu_count": 14,
+  "memory_total_gib": 36.0,
+  "memory_available_gib": 12.318206787109375,
+  "disk_free_gib": 68.0338363647461,
+  "note": "Standard detector could not read swap under the sandbox; these checks do not query swap."
+}
