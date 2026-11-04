@@ -135,11 +135,9 @@ class ConditionedNCA(nn.Module):
             angles = xy * (math.pi * frequency)
             features.extend([angles.sin(), angles.cos()])
         if self.config.plane_channels:
-            spatial = F.grid_sample(
+            spatial = self.sample_border(
                 self.planes["xy"].expand(len(ids), -1, -1, -1),
                 xy.permute(0, 2, 3, 1),
-                padding_mode="border",
-                align_corners=False,
             )
             plane_phase = phase if self.config.use_phase else torch.zeros_like(phase)
             xt = self.sample_time_plane(self.planes["xt"], xy[:, 0], plane_phase)
@@ -150,6 +148,23 @@ class ConditionedNCA(nn.Module):
         return torch.cat(features, dim=1)
 
     @staticmethod
+    def sample_border(plane: Tensor, grid: Tensor) -> Tensor:
+        """Border-equivalent bilinear sampling, supported by Metal without CPU fallback.
+
+        Clamping to the first/last pixel centers makes zero padding irrelevant.
+        PyTorch 2.8's MPS grid sampler does not implement border padding.
+        """
+        height, width = plane.shape[-2:]
+        bounded = torch.stack(
+            [
+                grid[..., 0].clamp(-1 + 1 / width, 1 - 1 / width),
+                grid[..., 1].clamp(-1 + 1 / height, 1 - 1 / height),
+            ],
+            dim=-1,
+        )
+        return F.grid_sample(plane, bounded, padding_mode="zeros", align_corners=False)
+
+    @staticmethod
     def sample_time_plane(plane: Tensor, coordinate: Tensor, phase: Tensor) -> Tensor:
         """Bilinear space-time features with periodic time, including the seam."""
         count = plane.shape[-1]
@@ -158,9 +173,7 @@ class ConditionedNCA(nn.Module):
             coordinate
         )
         grid = torch.stack([time, coordinate], dim=-1)
-        return F.grid_sample(
-            wrapped.expand(len(phase), -1, -1, -1), grid, padding_mode="border", align_corners=False
-        )
+        return ConditionedNCA.sample_border(wrapped.expand(len(phase), -1, -1, -1), grid)
 
     def forward(
         self,

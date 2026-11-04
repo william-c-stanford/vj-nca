@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 import torch
+from torch.nn import functional as F
 
 from vj_nca.data import make_procedural
 from vj_nca.model import ConditionedNCA, ModelConfig
@@ -95,6 +96,17 @@ class PatchTests(unittest.TestCase):
             model.conditioning(ids, phase, 8, 8), model.conditioning(ids, phase + 0.2, 8, 8)
         )
 
+    def test_portable_sampler_matches_border_values_and_plane_gradients(self):
+        plane = torch.randn(2, 3, 7, 9, requires_grad=True)
+        # Include points beyond every edge and close to the image corners.
+        grid = torch.rand(2, 6, 8, 2) * 4 - 2
+        expected = F.grid_sample(plane, grid, padding_mode="border", align_corners=False)
+        actual = ConditionedNCA.sample_border(plane, grid)
+        torch.testing.assert_close(actual, expected, atol=1e-6, rtol=1e-6)
+        a = torch.autograd.grad(actual.square().sum(), plane, retain_graph=True)[0]
+        b = torch.autograd.grad(expected.square().sum(), plane)[0]
+        torch.testing.assert_close(a, b, atol=1e-5, rtol=1e-6)
+
     def test_patch_resume_preserves_origins_rng_and_weights(self):
         dataset = make_procedural(size=16, frames=8, count=2)
         cfg = TrainConfig(
@@ -102,6 +114,7 @@ class PatchTests(unittest.TestCase):
             channels=7,
             hidden=8,
             patch_size=8,
+            patch_edge_probability=0.15,
             plane_channels=2,
             plane_resolution=8,
             plane_time_resolution=8,

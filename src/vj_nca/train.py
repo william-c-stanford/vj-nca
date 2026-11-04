@@ -36,6 +36,7 @@ class TrainConfig:
     direct_rgb: bool = False
     patch_size: int = 0
     loss_margin: int = 0
+    patch_edge_probability: float = 0.5
     steps_per_frame: int = 2
     unroll_min: int = 8
     unroll_max: int = 16
@@ -90,6 +91,7 @@ class TrainConfig:
             self.damage_probability,
             self.noise_probability,
             self.swap_probability,
+            self.patch_edge_probability,
         ):
             if not 0 <= value <= 1:
                 raise ValueError("Probabilities must be in [0, 1]")
@@ -255,8 +257,17 @@ def train(
     def sample_origins(count: int) -> Tensor:
         maximum = (dataset.size - state_size) // alignment
         position = torch.randint(maximum + 1, (count, 2), device=device)
-        edge = torch.randint(4, (count, 2), device=device)
-        position = torch.where(edge == 0, 0, torch.where(edge == 1, maximum, position))
+        if config.patch_edge_probability == 0.5:
+            # Preserve the original RNG sequence for old recipes/checkpoints.
+            edge = torch.randint(4, (count, 2), device=device)
+            position = torch.where(edge == 0, 0, torch.where(edge == 1, maximum, position))
+        else:
+            choice = torch.rand(count, 2, device=device)
+            position = torch.where(
+                choice < config.patch_edge_probability / 2,
+                0,
+                torch.where(choice < config.patch_edge_probability, maximum, position),
+            )
         return position * alignment
 
     if config.patch_size:

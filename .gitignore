@@ -11,3 +11,4 @@ runs/
 !artifacts/*/model.pt
 !experiments/autoresearch/trials/*/model.pt
 !experiments/rave-512/trials/*/model.pt
+!experiments/aperture-fast/trials/*/model.pt

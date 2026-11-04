@@ -1,4 +1,4 @@
-"""Capture an immutable native-512 trial without its large optimizer/replay state."""
+"""Capture an immutable training trial without its large optimizer/replay state."""
 
 import argparse
 import json
@@ -12,13 +12,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", type=Path, required=True)
     parser.add_argument("--name", required=True)
+    parser.add_argument("--trials-dir", type=Path, default=Path("experiments/rave-512/trials"))
     args = parser.parse_args()
     if args.name in {".", ".."} or Path(args.name).name != args.name:
         raise ValueError("Trial name must be a single directory name")
     receipt = json.loads((args.run / "receipt.json").read_text())
     if receipt["status"] != "complete":
         raise ValueError("Record failed runs separately; this command requires complete results")
-    target = Path("experiments/rave-512/trials") / args.name
+    target = args.trials_dir / args.name
     target.mkdir(parents=True, exist_ok=False)
     for name in ("submission.json", "receipt.json"):
         shutil.copyfile(args.run / name, target / name)

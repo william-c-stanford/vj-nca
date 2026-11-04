@@ -33,6 +33,37 @@ def validate_preset(preset: dict, controls: dict) -> dict[str, float]:
     return result
 
 
+def prepare_shader_dataset(
+    directory: Path, manifest: dict, names: tuple[str, ...], size: int, frames: int, seconds: float
+):
+    """Render exact float targets at an explicit cycle rate, without video compression."""
+    import torch
+
+    from .data import LoopDataset
+
+    if frames < 4 or not math.isfinite(seconds) or seconds <= 0:
+        raise ValueError("Need at least four frames and a positive finite duration")
+    selected = {clip["name"]: clip for clip in manifest["clips"]}
+    if not names or len(set(names)) != len(names) or any(n not in selected for n in names):
+        raise ValueError("Select unique shader names from the manifest")
+    videos, sources = [], []
+    with ShaderRenderer(directory, size) as renderer:
+        for name in names:
+            clip = selected[name]
+            pixels = np.stack([renderer.render(clip, i / frames) for i in range(frames)])
+            videos.append(torch.from_numpy(pixels).permute(0, 3, 1, 2) * 2 - 1)
+            sources.append(
+                {
+                    "kind": "original-shader",
+                    "license": manifest["license"],
+                    "cycle_seconds": seconds,
+                    "preview_speed_multiplier": manifest["duration_seconds"] / seconds,
+                    **renderer.provenance(clip, manifest["controls"]),
+                }
+            )
+    return LoopDataset(torch.stack(videos), list(names), frames / seconds, sources)
+
+
 class ShaderRenderer:
     """Native-pixel float output. Caller owns the context lifetime via `with`."""
 
