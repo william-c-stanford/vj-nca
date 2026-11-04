@@ -40,9 +40,14 @@ def evaluate_repair(
     circle=(0.4, 0.05, 0.68),
     ablate_repair=False,
 ) -> dict:
-    if frames < 2 * dataset.period or len(dataset.names) != 1:
-        raise ValueError("Use one loop and at least two cycles")
     saved = torch.load(checkpoint, map_location="cpu", weights_only=False)
+    steps_per_frame = saved.get(
+        "steps_per_frame", saved.get("train_config", {}).get("steps_per_frame", 1)
+    )
+    period_ticks = dataset.period * steps_per_frame
+    fps = dataset.fps * steps_per_frame
+    if frames < 2 * period_ticks or len(dataset.names) != 1:
+        raise ValueError("Use one loop and at least two cycles of NCA updates")
     if saved["dataset_fingerprint"] != dataset.fingerprint():
         raise ValueError("Evaluation dataset differs from training")
     model = ConditionedNCA(ModelConfig(**saved["model_config"])).to(device).eval()
@@ -54,10 +59,9 @@ def evaluate_repair(
     output.mkdir(parents=True, exist_ok=True)
     ids = torch.zeros(1, dtype=torch.long, device=device)
     state = model.seed(1, dataset.size, device)
-    for tick in range(1, 4 * dataset.period + 1):
-        phase = torch.tensor(
-            [(phase_frame + tick) % dataset.period / dataset.period], device=device
-        )
+    phase_tick = phase_frame * steps_per_frame
+    for tick in range(1, 4 * period_ticks + 1):
+        phase = torch.tensor([(phase_tick + tick) % period_ticks / period_ticks], device=device)
         state = model(state, ids, phase)
     kinds = ("blackout", "glitch", "rgb-split", "tear", "beat", "noise", "full-reset")
     states, masks = {"clean": state}, {}
@@ -88,13 +92,17 @@ def evaluate_repair(
         if export:
             for kind in ("clean", "blackout", "glitch", "rgb-split", "tear", "beat"):
                 writers[kind] = stack.enter_context(
-                    VideoWriter(output / f"{kind}.mp4", dataset.size, dataset.size, dataset.fps)
+                    VideoWriter(output / f"{kind}.mp4", dataset.size, dataset.size, fps)
                 )
             writers["comparison"] = stack.enter_context(
-                VideoWriter(output / "comparison.mp4", 4 * dataset.size, dataset.size, dataset.fps)
+                VideoWriter(output / "comparison.mp4", 4 * dataset.size, dataset.size, fps)
             )
         for step in range(frames + 1):
-            target = dataset.frames[0, (phase_frame + step) % dataset.period][None]
+            target = dataset.target(
+                ids,
+                torch.tensor([(phase_tick + step) % period_ticks], device=device),
+                steps_per_frame,
+            )
             rgbs = {k: model.rgb(v) for k, v in states.items()}
             clean = rgbs["clean"]
             if not all(torch.isfinite(v).all() for v in states.values()):
@@ -147,7 +155,7 @@ def evaluate_repair(
                     writer.write(rgb)
             if step < frames:
                 phase = torch.tensor(
-                    [(phase_frame + step + 1) % dataset.period / dataset.period], device=device
+                    [(phase_tick + step + 1) % period_ticks / period_ticks], device=device
                 )
                 states = {k: model(v, ids, phase) for k, v in states.items()}
                 if ablate_repair:
@@ -165,19 +173,19 @@ def evaluate_repair(
     perturbations = {}
     for kind in kinds:
         recovery = sustained_recovery(
-            paired[kind], errors[kind], errors["clean"], eligible, dataset.period
+            paired[kind], errors[kind], errors["clean"], eligible, period_ticks
         )
         perturbations[kind] = dict(
             recovery_frame=recovery,
-            recovery_seconds=recovery / dataset.fps if recovery is not None else None,
+            recovery_seconds=recovery / fps if recovery is not None else None,
             paired_curve=paired[kind],
             target_curve=errors[kind],
             support_curve=support[kind],
         )
     regional_times = {}
     for region, curve in regional.items():
-        recovery = sustained_recovery(curve, curve, [0.0] * len(curve), True, dataset.period)
-        regional_times[region] = recovery / dataset.fps if recovery is not None else None
+        recovery = sustained_recovery(curve, curve, [0.0] * len(curve), True, period_ticks)
+        regional_times[region] = recovery / fps if recovery is not None else None
     spatial = (
         regional_times["rim"] is not None
         and regional_times["core"] is not None
@@ -192,7 +200,9 @@ def evaluate_repair(
         evaluator="learned-progressive-repair",
         resolution=dataset.size,
         device=str(device),
-        fps=dataset.fps,
+        fps=fps,
+        dataset_fps=dataset.fps,
+        steps_per_frame=steps_per_frame,
         cycle_seconds=dataset.period / dataset.fps,
         seed=seed,
         frames=frames,
@@ -213,7 +223,7 @@ def evaluate_repair(
         blackout_regional_curves=regional,
         spatial_rebuilding_pass=spatial,
         progressive_damage_pass=progressive,
-        recovery_sustained_frames=dataset.period,
+        recovery_sustained_frames=period_ticks,
         quality_and_recovery_pass=eligible
         and spatial
         and progressive
@@ -224,7 +234,7 @@ def evaluate_repair(
             if k != "full-reset"
         ),
         note=(
-            "Recovery is sustained for a complete fast teacher cycle. Local support is "
+            "Recovery is sustained for a complete teacher cycle. Local support is "
             "predicted by the NCA; the dilation curriculum is used only in training."
         ),
     )

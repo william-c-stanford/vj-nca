@@ -96,6 +96,13 @@ class RepairTests(unittest.TestCase):
         self.assertTrue((next_state[:, -1:] >= 0).all())
         self.assertTrue((next_state[:, -1:] <= 0.12).all())
         torch.testing.assert_close(next_state[:, :3], damaged[:, :3])
+        with tempfile.TemporaryDirectory() as folder:
+            p = Path(folder) / "repair.pt"
+            torch.save(dict(model_config=asdict(new.config), model=new.state_dict()), p)
+            restored = ConditionedNCA(new.config)
+            initialize_repair(restored, p)
+            for key in new.state_dict():
+                torch.testing.assert_close(new.state_dict()[key], restored.state_dict()[key])
 
     def test_repair_resume_restores_curriculum_and_optimizer(self):
         dataset = make_procedural(size=16, frames=4, count=1)
@@ -117,7 +124,7 @@ class RepairTests(unittest.TestCase):
             fresh_fraction=0.1,
             log_every=4,
             checkpoint_every=4,
-            steps_per_frame=1,
+            steps_per_frame=4,
             fire_rate=1,
         )
         with tempfile.TemporaryDirectory() as folder:
@@ -132,6 +139,7 @@ class RepairTests(unittest.TestCase):
                 torch.testing.assert_close(a["model"][key], b["model"][key], atol=0, rtol=0)
             for key in a["pool"]:
                 torch.testing.assert_close(a["pool"][key], b["pool"][key], atol=0, rtol=0)
+            self.assertTrue((a["pool"]["ticks"] < dataset.period * 4).all())
 
     def test_evaluator_measures_spatial_regions_and_sustains_a_cycle(self):
         data = make_procedural(size=16, frames=4, count=1)
@@ -153,13 +161,16 @@ class RepairTests(unittest.TestCase):
                     model_config=asdict(model.config),
                     model=model.state_dict(),
                     dataset_fingerprint=data.fingerprint(),
-                    steps_per_frame=1,
+                    steps_per_frame=4,
                 ),
                 p / "weights.pt",
             )
             result = evaluate_repair(
-                p / "weights.pt", data, p / "eval", device="cpu", frames=16, export=False
+                p / "weights.pt", data, p / "eval", device="cpu", frames=32, export=False
             )
+            self.assertEqual(result["fps"], 64)
+            self.assertEqual(result["cycle_seconds"], 0.25)
+            self.assertEqual(result["recovery_sustained_frames"], 16)
             self.assertIn("rim", result["blackout_regional_recovery_seconds"])
             self.assertFalse(result["quality_and_recovery_pass"])
         curve = [0.0, 0.04, 0.03, 0.04] * 4 + [0.0] * 8

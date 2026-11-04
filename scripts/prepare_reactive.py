@@ -1,4 +1,4 @@
-"""Build the actual faster teacher: four contour advances per second at 64fps."""
+"""Set Aperture to a four-second cycle: twice the original eight-second preview."""
 
 import argparse
 import copy
@@ -17,9 +17,9 @@ def main():
     parser.add_argument(
         "--source", type=Path, default=Path("artifacts/aperture-fast-v1/targets.npz")
     )
-    parser.add_argument("--out", type=Path, default=Path("data/aperture-reactive.npz"))
+    parser.add_argument("--out", type=Path, default=Path("data/aperture-reactive-2x.npz"))
     parser.add_argument(
-        "--preview", type=Path, default=Path("runs/aperture-reactive/teacher-cycle.mp4")
+        "--preview", type=Path, default=Path("runs/aperture-reactive-2x/teacher-cycle.mp4")
     )
     args = parser.parse_args()
     torch.set_num_threads(2)
@@ -28,13 +28,14 @@ def main():
         raise ValueError("Expected the exact 64-frame original Aperture cycle")
     sources = copy.deepcopy(parent.sources)
     sources[0].update(
-        cycle_seconds=0.25,
-        preview_speed_multiplier=32,
+        cycle_seconds=4.0,
+        original_preview_cycle_seconds=8.0,
+        preview_speed_multiplier=2,
         parent_dataset_fingerprint=parent.fingerprint(),
-        temporal_stride=4,
-        contour_advances_per_second=4,
+        temporal_stride=1,
+        contour_advances_per_second=0.25,
     )
-    dataset = LoopDataset(parent.frames[:, ::4], parent.names, 64, sources)
+    dataset = LoopDataset(parent.frames, parent.names, 16, sources)
     dataset.save(args.out)
     save_video(args.preview, dataset.frames[0], dataset.fps)
     print(

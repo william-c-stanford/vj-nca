@@ -12,11 +12,11 @@ from vj_nca.repair_eval import evaluate_repair
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkpoint", type=Path, required=True)
-    parser.add_argument("--data", type=Path, default=Path("data/aperture-reactive.npz"))
+    parser.add_argument("--data", type=Path, default=Path("data/aperture-reactive-2x.npz"))
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--device", default="mps")
     parser.add_argument("--seed", type=int, default=4041)
-    parser.add_argument("--frames", type=int, default=192)
+    parser.add_argument("--frames", type=int, default=512)
     parser.add_argument("--phase-frame", type=int, default=0)
     parser.add_argument("--no-export", action="store_true")
     parser.add_argument(

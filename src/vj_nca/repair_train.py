@@ -48,11 +48,14 @@ class RepairPool(ReplayPool):
 def initialize_repair(
     model: ConditionedNCA, path: Path, loop_names: list[str] | None = None
 ) -> str:
-    """Embed the passing rule in a wider state; new repair inputs/head start at zero."""
+    """Warm-start an existing repair rule, or add repair state to the image rule."""
     saved = torch.load(path, map_location="cpu", weights_only=True)
     if loop_names is not None and saved.get("loop_names") != loop_names:
         raise ValueError("Initialization loop IDs differ from the new dataset")
     old = ModelConfig(**saved["model_config"])
+    if old.repair_channel and asdict(old) == asdict(model.config):
+        model.load_state_dict(saved["model"])
+        return hashlib.sha256(path.read_bytes()).hexdigest()
     if (
         old.repair_channel
         or not model.config.repair_channel
@@ -103,10 +106,9 @@ def train_repair(
     initialize: Path | None = None,
 ) -> Path:
     config.__post_init__()
-    if not config.repair_channel or config.steps_per_frame != 1 or config.fire_rate != 1:
-        raise ValueError(
-            "Repair recipe requires repair_channel and one synchronous update per frame"
-        )
+    if not config.repair_channel or config.fire_rate != 1:
+        raise ValueError("Repair recipe requires repair_channel and synchronous updates")
+    period_ticks = dataset.period * config.steps_per_frame
     if resume and initialize:
         raise ValueError("Resume and initialization are different operations")
     size = config.patch_size or dataset.size
@@ -148,7 +150,7 @@ def train_repair(
     )
     pool = RepairPool(len(dataset.names), config.pool_per_loop, config.channels, size, device)
     pool.states.copy_(model.seed(capacity, size, device))
-    pool.ticks.random_(0, dataset.period)
+    pool.ticks.random_(0, period_ticks)
 
     def origins(count):
         maximum = (dataset.size - size) // alignment
@@ -178,19 +180,21 @@ def train_repair(
     else:
         with torch.no_grad():
             ids = pool.loop_ids(torch.arange(capacity, device=device))
-            for _ in range(2 * dataset.period):
-                pool.ticks = (pool.ticks + 1) % dataset.period
+            for _ in range(2 * period_ticks):
+                pool.ticks = (pool.ticks + 1) % period_ticks
                 pool.states.copy_(
                     model(
                         pool.states,
                         ids,
-                        pool.ticks.float() / dataset.period,
+                        pool.ticks.float() / period_ticks,
                         origins=pool.origins,
                         canvas_size=dataset.size,
                     )
                 )
             pool.teacher_rgb.copy_(
-                crop_targets(dataset.target(ids, pool.ticks, 1), pool.origins, size)
+                crop_targets(
+                    dataset.target(ids, pool.ticks, config.steps_per_frame), pool.origins, size
+                )
             )
     (output / "config.json").write_text(json.dumps(asdict(config), indent=2) + "\n")
     (output / "dataset.json").write_text(
@@ -222,11 +226,13 @@ def train_repair(
             fresh = torch.rand(len(slots), device=device) < config.fresh_fraction
             if fresh.any():
                 state[fresh] = model.seed(int(fresh.sum()), size, device)
-                ticks[fresh] = torch.randint(dataset.period, (int(fresh.sum()),), device=device)
+                ticks[fresh] = torch.randint(period_ticks, (int(fresh.sum()),), device=device)
                 location[fresh] = origins(int(fresh.sum()))
                 support[fresh] = 1
                 teacher_rgb[fresh] = crop_targets(
-                    dataset.target(ids[fresh], ticks[fresh], 1), location[fresh], size
+                    dataset.target(ids[fresh], ticks[fresh], config.steps_per_frame),
+                    location[fresh],
+                    size,
                 )
             for i in range(len(slots)):
                 healthy = support[i].mean().item() > 0.985
@@ -253,15 +259,17 @@ def train_repair(
             predictions, targets, supports, support_targets = [], [], [], []
             unroll = random.randint(config.unroll_min, config.unroll_max)
             for _ in range(unroll):
-                ticks = (ticks + 1) % dataset.period
+                ticks = (ticks + 1) % period_ticks
                 state = model(
                     state,
                     ids,
-                    ticks.float() / dataset.period,
+                    ticks.float() / period_ticks,
                     origins=location,
                     canvas_size=dataset.size,
                 )
-                clean_target = crop_targets(dataset.target(ids, ticks, 1), location, size)
+                clean_target = crop_targets(
+                    dataset.target(ids, ticks, config.steps_per_frame), location, size
+                )
                 support, teacher_rgb = repair_teacher_step(
                     support, teacher_rgb, clean_target, model.config
                 )

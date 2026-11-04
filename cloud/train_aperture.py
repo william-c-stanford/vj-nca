@@ -101,9 +101,8 @@ def run_trial(
             checkpoint.write_bytes(weights)
         status = "complete"
         try:
-            checkpoint_config = torch.load(checkpoint, map_location="cpu", weights_only=False)[
-                "model_config"
-            ]
+            checkpoint_payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
+            checkpoint_config = checkpoint_payload["model_config"]
             if checkpoint_config.get("repair_channel"):
                 from vj_nca.repair_eval import evaluate_repair
 
@@ -113,7 +112,15 @@ def run_trial(
                     root / "eval",
                     device="cuda",
                     seed=eval_seed,
-                    frames=max(192, eval_cycles * dataset.period),
+                    frames=max(
+                        192,
+                        eval_cycles
+                        * dataset.period
+                        * checkpoint_payload.get(
+                            "steps_per_frame",
+                            checkpoint_payload.get("train_config", {}).get("steps_per_frame", 1),
+                        ),
+                    ),
                     phase_frame=phase_frame,
                 )
                 summary = {
